@@ -20,3 +20,20 @@ body {
   margin: 0;
   min-height: 100dvh;
 }
+
+@theme {
+  --color-kakao: #fee500;
+  --color-google: #ffffff;
+  --color-naver: #00c853;
+
+  --color-brand-50: #f1f5ff;
+  --color-brand-100: #dce7ff;
+  --color-brand-200: #b8ceff;
+  --color-brand-300: #8cb4ff;
+  --color-brand-400: #5f96ff;
+  --color-brand-500: #3d78ff;
+  --color-brand-600: #2c5de6;
+  --color-brand-700: #2449b3;
+  --color-brand-800: #1e3b8a;
+  --color-brand-900: #1c3570;
+}
