@@ -1,8 +1,8 @@
 import { IntroPhraseSection } from '../components/IntroPhraseSection.tsx';
 import { SocialLoginSection } from '../components/SocialLoginSection.tsx';
-import { LOGIN_CONFIG } from '../constants/loginConfig.ts';
 import { useIntroPhrase } from '../hooks/useLoginPhrase.tsx';
 import { useLoginPageEffect } from '../hooks/useLoginPageEffect.tsx';
+import loginBgImage from '@/assets/login/background.webp';
 
 export const LoginPage = () => {
   const introPhrase = useIntroPhrase();
@@ -11,9 +11,9 @@ export const LoginPage = () => {
   return (
     <div className="relative h-dvh w-full overflow-hidden">
       <img
-        src={LOGIN_CONFIG.BACKGROUND.image}
+        src={loginBgImage}
         className="absolute inset-0 h-full w-full object-cover"
-        alt=""
+        alt="login background"
       />
 
       <div className="relative z-10 flex flex-col min-h-dvh">

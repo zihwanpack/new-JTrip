@@ -20,3 +20,9 @@ body {
   margin: 0;
   min-height: 100dvh;
 }
+
+@theme {
+  --color-kakao: #fee500;
+  --color-google: #ffffff;
+  --color-naver: #00c853;
+}

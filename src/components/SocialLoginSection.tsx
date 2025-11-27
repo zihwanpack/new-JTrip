@@ -1,20 +1,38 @@
-import { LOGIN_CONFIG } from '../constants/loginConfig.ts';
+import kakaoLogo from '@/assets/login/logoKakao.svg';
+import googleLogo from '@/assets/login/logoGoogle.svg';
+import naverLogo from '@/assets/login/logoNaver.svg';
 
 export const SocialLoginSection = () => {
+  const providerList = [
+    {
+      image: kakaoLogo,
+      provider: 'kakao',
+      bgColor: 'bg-kakao',
+    },
+    {
+      image: googleLogo,
+      provider: 'google',
+      bgColor: 'bg-google',
+    },
+    {
+      image: naverLogo,
+      provider: 'naver',
+      bgColor: 'bg-naver',
+    },
+  ];
+
   return (
     <section className="flex gap-4">
-      {LOGIN_CONFIG.SOCIAL_LOGIN.LOGOS.map((logo, idx) => {
-        const provider = LOGIN_CONFIG.SOCIAL_LOGIN.PROVIDERS[idx];
+      {providerList.map(({ image, provider, bgColor }) => {
         return (
           <button
             key={provider}
             onClick={() => {
-              // ❗백엔드 OAuth 엔드포인트로 이동
               window.location.href = `${import.meta.env.VITE_API_URL}/auth/${provider}`;
             }}
-            className={`${LOGIN_CONFIG.SOCIAL_LOGIN.COLORS[idx]} rounded-full p-3 shadow-md w-14 h-14 flex items-center justify-center cursor-pointer`}
+            className={`rounded-full p-3 shadow-md w-14 h-14 flex items-center justify-center cursor-pointer ${bgColor}`}
           >
-            <img src={logo} alt={`${provider} login`} className="w-6 h-6" />
+            <img src={image} alt={`${provider} login`} className="w-6 h-6" />
           </button>
         );
       })}
