@@ -1,7 +1,5 @@
-import type { IntroPhrase } from '../types/login.ts';
-
 type IntroPhraseSectionProps = {
-  introPhrase: IntroPhrase;
+  introPhrase: string;
 };
 
 export const IntroPhraseSection = ({ introPhrase }: IntroPhraseSectionProps) => {
