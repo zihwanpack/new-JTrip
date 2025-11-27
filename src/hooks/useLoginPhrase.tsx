@@ -1,29 +1,18 @@
 import { useEffect, useState } from 'react';
-import { LOGIN_CONFIG } from '../constants/loginConfig.ts';
-import type { IntroPhrase } from '../types/login.ts';
-import { delay } from '../utils/delay';
 
-export const useIntroPhrase = (): IntroPhrase => {
-  const phrases = LOGIN_CONFIG.INTRO_PHRASES;
+const phrases = ['누구나', 'J처럼', '여행하기'];
+const PHRASE_INTERVAL = 2000; // 2초마다 변경 (원하는 대로 조절 가능)
 
-  const [showPhrase, setShowPhrase] = useState<IntroPhrase>(phrases[0]);
+export const useIntroPhrase = (): string => {
+  const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    let isMounted = true;
-    const run = async () => {
-      let idx = 0;
+    const interval = setInterval(() => {
+      setIndex((prev) => (prev + 1) % phrases.length);
+    }, PHRASE_INTERVAL);
 
-      while (isMounted) {
-        await delay(LOGIN_CONFIG.PHRASE_INTERVAL);
-        idx = (idx + 1) % phrases.length;
-        if (isMounted) setShowPhrase(phrases[idx]);
-      }
-    };
-    run();
-    return () => {
-      isMounted = false;
-    };
-  }, [phrases]);
+    return () => clearInterval(interval);
+  }, []);
 
-  return showPhrase;
+  return phrases[index];
 };
