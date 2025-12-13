@@ -17,6 +17,7 @@ import { isUpcomingTrip } from '../utils/isUpcomingTrip.ts';
 import { isPastTrip } from '../utils/isPastTrip.ts';
 import { formatDateRange } from '../utils/formatDateRange.ts';
 import { getWelcomeMessage } from '../utils/getWelcomeMessage.ts';
+import { Footer } from '../layouts/Footer.tsx';
 
 export const HomePage = () => {
   const { user } = useAuth();
@@ -98,6 +99,7 @@ export const HomePage = () => {
           ))}
         </div>
       </section>
+      <Footer />
     </div>
   );
 };
