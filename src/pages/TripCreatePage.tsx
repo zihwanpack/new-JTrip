@@ -13,11 +13,14 @@ import { ProgressBar } from '../components/ProgressBar.tsx';
 import { TripCreateStepFirstForm } from '../components/TripCreateFirstForm.tsx';
 import { TripCreateStepSecondForm } from '../components/TripCreateSecondForm.tsx';
 import { TripCreateStepThirdForm } from '../components/TripCreateThirdForm.tsx';
+import { TripCreateFourthForm } from '../components/TripCreateFourthForm.tsx';
+import { useAuth } from '../hooks/useAuth.tsx';
 
 export const TripCreatePage = () => {
   const { step, setStep, resetStep } = usePersistedStep('trip_create_step', 1);
 
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const initialValues = localStorage.getItem(TRIP_CREATE_FORM_LOCAL_STORAGE_KEY);
   const defaultValues = initialValues
@@ -26,14 +29,25 @@ export const TripCreatePage = () => {
         destination: '',
         startDate: '',
         endDate: '',
-        member: [],
+        members: [],
         title: '',
+        createdBy: user?.email,
       };
 
   const form = useForm<TripFormValues>({
     resolver: zodResolver(tripSchema),
+    mode: 'onChange',
     defaultValues,
   });
+
+  useEffect(() => {
+    if (user?.email) {
+      const currentEmail = form.getValues('createdBy');
+      if (!currentEmail) {
+        form.setValue('createdBy', user.email);
+      }
+    }
+  }, [user, form]);
 
   useEffect(() => {
     const subscription = form.watch((value) => {
@@ -52,18 +66,10 @@ export const TripCreatePage = () => {
     <div className="flex flex-col h-full">
       <Header title="여행 추가하기" onClose={handleCloseOrFinish} />
       <ProgressBar progress={step} steps={TRIP_CREATE_TOTAL_STEPS} />
-      {step === 1 && (
-        <TripCreateStepFirstForm onNext={setStep} form={form} />
-      )}
-      {step === 2 && (
-        <TripCreateStepSecondForm onNext={setStep} form={form} />
-      )}
-      {step === 3 && (
-        <TripCreateStepThirdForm />
-      )}  
-      {step === 4 && (
-        <TripCreateStepThirdForm />
-      )}  
+      {step === 1 && <TripCreateStepFirstForm setStep={setStep} form={form} />}
+      {step === 2 && <TripCreateStepSecondForm setStep={setStep} form={form} />}
+      {step === 3 && <TripCreateStepThirdForm setStep={setStep} form={form} />}
+      {step === 4 && <TripCreateFourthForm setStep={setStep} form={form} />}
     </div>
   );
 };
