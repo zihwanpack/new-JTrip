@@ -22,7 +22,7 @@ export const TripCreatePage = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
 
-  const initialValues = localStorage.getItem(TRIP_CREATE_FORM_LOCAL_STORAGE_KEY);
+  const initialValues = sessionStorage.getItem(TRIP_CREATE_FORM_LOCAL_STORAGE_KEY);
   const defaultValues = initialValues
     ? JSON.parse(initialValues)
     : {
@@ -51,14 +51,14 @@ export const TripCreatePage = () => {
 
   useEffect(() => {
     const subscription = form.watch((value) => {
-      localStorage.setItem(TRIP_CREATE_FORM_LOCAL_STORAGE_KEY, JSON.stringify(value));
+      sessionStorage.setItem(TRIP_CREATE_FORM_LOCAL_STORAGE_KEY, JSON.stringify(value));
     });
     return () => subscription.unsubscribe();
   }, [form]);
 
   const handleCloseOrFinish = () => {
     resetStep();
-    localStorage.removeItem(TRIP_CREATE_FORM_LOCAL_STORAGE_KEY);
+    sessionStorage.removeItem(TRIP_CREATE_FORM_LOCAL_STORAGE_KEY);
     navigate('/');
   };
 

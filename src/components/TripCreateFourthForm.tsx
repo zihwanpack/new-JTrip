@@ -35,7 +35,7 @@ export const TripCreateFourthForm = ({
 
     try {
       await createTripApi(apiData);
-      localStorage.removeItem(TRIP_CREATE_FORM_LOCAL_STORAGE_KEY);
+      sessionStorage.removeItem(TRIP_CREATE_FORM_LOCAL_STORAGE_KEY);
       navigate('/');
     } catch (err) {
       setError(err instanceof TripError ? err : new TripError('여행 추가 실패', 500));
