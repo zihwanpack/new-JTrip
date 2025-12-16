@@ -4,9 +4,14 @@ export type User = {
   id: string;
   provider: Provider;
   email: string;
-  userImage: string | null;
+  profileImage: string | null;
   nickname: string;
   userMemo?: string;
   createdAt: string;
   createdBy?: string;
 };
+
+export type UserSearchResponse = Pick<
+  User,
+  'id' | 'email' | 'nickname' | 'provider' | 'profileImage'
+>;
