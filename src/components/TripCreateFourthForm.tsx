@@ -1,5 +1,6 @@
 import type { UseFormReturn } from 'react-hook-form';
-import type { TripCreateRequest, TripFormValues } from '../schemas/tripSchema.ts';
+import type { TripFormValues } from '../schemas/tripSchema.ts';
+import type { TripCreateRequest } from '../types/trip.ts';
 import { createTripApi } from '../api/trip.ts';
 import { useState } from 'react';
 import TripError from '../errors/TripError.ts';
