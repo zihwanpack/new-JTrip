@@ -14,10 +14,6 @@ export const ProgressBar = ({ progress, steps }: ProgressBarProps) => {
           style={{ width: `${percentage}%` }}
         />
       </div>
-
-      <div className="mt-2 text-right text-xs text-gray-500">
-        {progress} / {steps}
-      </div>
     </div>
   );
 };
