@@ -1,6 +1,6 @@
 import { Outlet, Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-import { Loader } from 'lucide-react';
+import { Loader } from '../components/Loader.tsx';
 
 export const ProtectedLayout = () => {
   const { user, loading } = useAuth();
