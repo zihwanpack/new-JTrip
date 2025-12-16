@@ -5,10 +5,10 @@ import { ko } from 'date-fns/locale';
 import type { TripFormValues } from '../schemas/tripSchema.ts';
 
 export const TripCreateStepSecondForm = ({
-  onNext,
+  setStep,
   form,
 }: {
-  onNext: (step: number) => void;
+  setStep: (step: number) => void;
   form: UseFormReturn<TripFormValues>;
 }) => {
   const { setValue, watch } = form;
@@ -76,8 +76,7 @@ export const TripCreateStepSecondForm = ({
           after:left-[50%]
           after:w-[50%]
           after:h-full
-          after:bg-black/8
-`,
+          after:bg-black/8`,
           range_middle: 'bg-black/8 text-black',
           range_end: `
           relative
@@ -98,7 +97,7 @@ export const TripCreateStepSecondForm = ({
       <div className="flex gap-3 mb-4 px-4">
         <button
           type="button"
-          onClick={() => onNext(1)}
+          onClick={() => setStep(1)}
           className="w-full py-2 rounded-md font-semibold transition cursor-pointer bg-gray-100 text-slate-600 hover:bg-gray-200"
         >
           이전
@@ -109,7 +108,7 @@ export const TripCreateStepSecondForm = ({
           disabled={!isStep2Valid}
           onClick={() => {
             if (!isStep2Valid) return;
-            onNext(3);
+            setStep(3);
           }}
           className={`
             w-full py-2 rounded-md font-semibold transition cursor-pointer
