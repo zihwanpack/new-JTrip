@@ -6,6 +6,7 @@ import { TripCreatePage } from '../pages/TripCreatePage.tsx';
 import { NotFound } from '../pages/NotFound.tsx';
 import { ProtectedLayout } from '../layouts/ProtectedLayout.tsx';
 import { BaseLayout } from '../layouts/BaseLayout.tsx';
+import { TripDetailPage } from '../pages/TripDetailPage.tsx';
 
 const publicRoutes: RouteObject[] = [
   {
@@ -38,6 +39,10 @@ const protectedRoutes: RouteObject[] = [
           {
             path: 'trips/new',
             element: <TripCreatePage />,
+          },
+          {
+            path: 'trips/:id',
+            element: <TripDetailPage />,
           },
         ],
       },
