@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import { useCallback } from 'react';
 
 import type { Trip } from '../types/trip.ts';
 import type TripError from '../errors/TripError.ts';
@@ -22,9 +21,11 @@ import { Footer } from '../layouts/Footer.tsx';
 export const HomePage = () => {
   const { user } = useAuth();
 
-  const fetchMyTrips = useCallback(() => getMyAllTripsApi(user?.id || ''), [user?.id]);
-
-  const { data: trips, error, isLoading } = useFetch<Trip[], TripError>(fetchMyTrips);
+  const {
+    data: trips,
+    error,
+    isLoading,
+  } = useFetch<Trip[], TripError>([user?.id], async () => getMyAllTripsApi(user?.id || ''));
 
   const showSkeleton = useMinimalLoading(300);
 
@@ -66,6 +67,7 @@ export const HomePage = () => {
           {upcomingTrips?.map((trip) => (
             <TripCard
               key={trip.id}
+              id={trip.id}
               tripImage={TRIP_IMAGE_PATHS[trip.destination] || DEFAULT_TRIP_IMAGE}
               title={trip.title}
               date={formatDateRange(trip.startDate, trip.endDate)}
@@ -91,6 +93,7 @@ export const HomePage = () => {
           {pastTrips?.map((trip) => (
             <TripCard
               key={trip.id}
+              id={trip.id}
               tripImage={TRIP_IMAGE_PATHS[trip.destination] || DEFAULT_TRIP_IMAGE}
               title={trip.title}
               date={formatDateToYearMonth(trip.startDate)}
