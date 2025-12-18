@@ -1,3 +1,7 @@
+import { formatDateToYearMonth } from './formatDateToYearMonth.ts';
+
 export const formatDateRange = (startDate: string, endDate: string) => {
-  return `${startDate} ~ ${endDate}`;
+  const startDateFormatted = formatDateToYearMonth(startDate);
+  const endDateFormatted = formatDateToYearMonth(endDate);
+  return `${startDateFormatted} ~ ${endDateFormatted}`;
 };
