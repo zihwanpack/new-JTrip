@@ -1,6 +1,6 @@
-export type RegionType = 'domestic' | 'overseas';
+import type { DestinationType } from '../types/trip.ts';
 
-export const DESTINATIONS: Record<RegionType, Record<string, string>> = {
+export const DESTINATIONS: Record<DestinationType, Record<string, string>> = {
   domestic: {
     seoul: '서울',
     busan: '부산',

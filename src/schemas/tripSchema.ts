@@ -1,7 +1,13 @@
 import { z } from 'zod';
+import { DESTINATION_KEYS } from '../constants/tripImages.ts';
 
 export const tripSchema = z.object({
-  destination: z.string().min(1, '여행지를 선택해주세요'),
+  destinationType: z.enum(['domestic', 'overseas'], {
+    message: '여행지 타입을 선택해주세요',
+  }),
+  destination: z.enum(DESTINATION_KEYS, {
+    message: '여행지를 선택해주세요',
+  }),
   startDate: z.string().min(1, '출발일을 선택해주세요'),
   endDate: z.string().min(1, '도착일을 선택해주세요'),
   members: z.array(z.string()),

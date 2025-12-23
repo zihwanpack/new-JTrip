@@ -1,10 +1,13 @@
 import type { DestinationKey } from '../constants/tripImages.ts';
 import type { SuccessResponse } from './defaultResponse.ts';
 
+export type DestinationType = 'domestic' | 'overseas';
+
 export type Trip = {
   id: number;
   title: string;
   destination: DestinationKey;
+  destinationType: DestinationType;
   startDate: string;
   endDate: string;
   members?: string[];

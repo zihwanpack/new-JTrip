@@ -20,26 +20,31 @@ import seoul from '@/assets/home/seoul.webp';
 import ulsan from '@/assets/home/ulsan.webp';
 
 export const TRIP_IMAGE_PATHS = {
-  BEACH: beach,
-  'domestic busan': busan,
-  'overseas china': china,
-  'domestic chungbuk': chungbuk,
-  'domestic chungnam': chungnam,
-  'domestic daegu': daegu,
-  'domestic daejeon': daejeon,
-  'domestic gangwon': gangwon,
-  'domestic gwangju': gwangju,
-  'domestic gyeongbuk': gyeongbuk,
-  'domestic gyeonggi': gyeonggi,
-  'domestic gyeongnam': gyeongnam,
-  'domestic incheon': incheon,
-  'overseas japan': japan,
-  'domestic jeju': jeju,
-  'domestic jeonbuk': jeonbuk,
-  'domestic jeonnam': jeonnam,
-  'overseas la': LA,
-  'domestic seoul': seoul,
-  'domestic ulsan': ulsan,
+  beach,
+  busan,
+  china,
+  chungbuk,
+  chungnam,
+  daegu,
+  daejeon,
+  gangwon,
+  gwangju,
+  gyeongbuk,
+  gyeonggi,
+  gyeongnam,
+  incheon,
+  japan,
+  jeju,
+  jeonbuk,
+  jeonnam,
+  LA,
+  seoul,
+  ulsan,
 } as const;
 
 export type DestinationKey = keyof typeof TRIP_IMAGE_PATHS;
+
+export const DESTINATION_KEYS = Object.keys(TRIP_IMAGE_PATHS) as [
+  DestinationKey,
+  ...DestinationKey[],
+];
