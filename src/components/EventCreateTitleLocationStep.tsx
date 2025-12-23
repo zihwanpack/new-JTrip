@@ -1,12 +1,11 @@
-import type { UseFormReturn } from 'react-hook-form';
-import type { EventFormValues } from '../schemas/eventSchema.ts';
 import { useEffect, useRef, useState } from 'react';
 import { useDebounce } from '../hooks/useDebounce.tsx';
 import { Loader2 } from 'lucide-react';
+import { useFormContext } from 'react-hook-form';
+import type { EventFormValues } from '../schemas/eventSchema.ts';
 
-interface EventCreateFirstFormProps {
+interface EventCreateTitleLocationStepProps {
   setStep: (step: number) => void;
-  form: UseFormReturn<EventFormValues>;
 }
 
 interface PlaceSuggestionWithAddress {
@@ -14,13 +13,13 @@ interface PlaceSuggestionWithAddress {
   formattedAddress: string;
 }
 
-export const EventCreateFirstForm = ({ setStep, form }: EventCreateFirstFormProps) => {
+export const EventCreateTitleLocationStep = ({ setStep }: EventCreateTitleLocationStepProps) => {
   const {
     watch,
     formState: { errors },
     setValue,
     register,
-  } = form;
+  } = useFormContext<EventFormValues>();
 
   const [places, setPlaces] = useState<PlaceSuggestionWithAddress[]>([]);
   const [isLoading, setIsLoading] = useState(false);
