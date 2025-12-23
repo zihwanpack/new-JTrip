@@ -1,17 +1,12 @@
+import type { SuccessResponse } from './defaultResponse.ts';
 import type { User } from './user.ts';
 
-export interface GetAuthenticatedUserResponse {
-  message: string;
-  user: User;
-}
+export type GetUserResponse = SuccessResponse<User>;
 
-export interface LogoutResponse {
-  message: string;
-  success: boolean;
-}
+export type LogoutResponse = SuccessResponse<null>;
 
-export interface AuthContextValue {
+export type AuthContextValue = {
   user: User | null;
   logout: () => Promise<void>;
   loading: boolean;
-}
+};
