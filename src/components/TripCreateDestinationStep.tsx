@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { DESTINATIONS, type DestinationType } from '../constants/destinations.ts';
+import { DESTINATIONS } from '../constants/destinations.ts';
 import { type TripFormValues } from '../schemas/tripSchema.ts';
 import { useFormContext } from 'react-hook-form';
 import { ChevronDownIcon } from 'lucide-react';
 import type { DestinationKey } from '../constants/tripImages.ts';
+import type { DestinationType } from '../types/trip.ts';
 
 interface TripCreateDestinationStepProps {
   setStep: (step: number) => void;
