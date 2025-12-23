@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from 'react';
-import { getAuthenticatedUserApi, logoutApi } from '../api/auth.ts';
+import { getUserApi, logoutApi } from '../api/auth.ts';
 import type { User } from '../types/user.ts';
 import type { AuthContextValue } from '../types/auth.ts';
 
@@ -12,8 +12,8 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const authLogin = async () => {
       try {
-        const { user } = await getAuthenticatedUserApi();
-        setUser(user);
+        const userData = await getUserApi();
+        setUser(userData);
       } catch {
         setUser(null);
       } finally {

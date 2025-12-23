@@ -1,26 +1,29 @@
 import { useNavigate } from 'react-router-dom';
 import { ProgressBar } from '../components/ProgressBar.tsx';
-import { EVENT_CREATE_FORM_SESSION_STORAGE_KEY } from '../constants/eventCreateFormSessionKey.ts';
 import { usePersistedStep } from '../hooks/usePersistedStep.tsx';
 import { Header } from '../layouts/Header.tsx';
-import { useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { eventSchema, type EventFormValues } from '../schemas/eventSchema.ts';
-import { EVENT_CREATE_TOTAL_STEPS } from '../constants/eventCreateTotalSteps.ts';
-import { EventCreateFirstForm } from '../components/EventCreateFirstForm.tsx';
-import { EventCreateSecondForm } from '../components/EventCreateSecondForm.tsx';
-import { EventCreateThirdForm } from '../components/EventCreateThirdForm.tsx';
+import {
+  EVENT_CREATE_STEP_KEY,
+  EVENT_CREATE_STORAGE_KEY,
+  EVENT_CREATE_TOTAL_STEPS,
+} from '../constants/event.ts';
+import { EventCreateTitleLocationStep } from '../components/EventCreateTitleLocationStep.tsx';
+import { EventCreateDateStep } from '../components/EventCreateDateStep.tsx';
+import { EventCreateCostStep } from '../components/EventCreateCostStep.tsx';
 import { useEffect } from 'react';
 
 export const EventCreatePage = () => {
-  const { step, setStep, resetStep } = usePersistedStep('event-create-step-key', 1);
+  const { step, setStep, resetStep } = usePersistedStep(EVENT_CREATE_STEP_KEY, 1);
   const navigate = useNavigate();
   const handleCloseForm = () => {
     resetStep();
-    sessionStorage.removeItem(EVENT_CREATE_FORM_SESSION_STORAGE_KEY);
+    sessionStorage.removeItem(EVENT_CREATE_STORAGE_KEY);
     navigate('/');
   };
-  const initialValues = sessionStorage.getItem(EVENT_CREATE_FORM_SESSION_STORAGE_KEY);
+  const initialValues = sessionStorage.getItem(EVENT_CREATE_STORAGE_KEY);
   const defaultValues = initialValues
     ? JSON.parse(initialValues)
     : {
@@ -39,7 +42,7 @@ export const EventCreatePage = () => {
 
   useEffect(() => {
     const subscription = form.watch((value) => {
-      sessionStorage.setItem(EVENT_CREATE_FORM_SESSION_STORAGE_KEY, JSON.stringify(value));
+      sessionStorage.setItem(EVENT_CREATE_STORAGE_KEY, JSON.stringify(value));
     });
     return () => subscription.unsubscribe();
   }, [form]);
@@ -48,9 +51,11 @@ export const EventCreatePage = () => {
     <div className="flex flex-col h-full">
       <Header title="이벤트 추가하기" onClose={handleCloseForm} />
       <ProgressBar progress={step} steps={EVENT_CREATE_TOTAL_STEPS} />
-      {step === 1 && <EventCreateFirstForm setStep={setStep} form={form} />}
-      {step === 2 && <EventCreateSecondForm setStep={setStep} form={form} />}
-      {step === 3 && <EventCreateThirdForm setStep={setStep} form={form} />}
+      <FormProvider {...form}>
+        {step === 1 && <EventCreateTitleLocationStep setStep={setStep} />}
+        {step === 2 && <EventCreateDateStep setStep={setStep} />}
+        {step === 3 && <EventCreateCostStep setStep={setStep} />}
+      </FormProvider>
     </div>
   );
 };

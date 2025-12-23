@@ -1,4 +1,5 @@
 import type { Cost } from './cost.ts';
+import type { SuccessResponse } from './defaultResponse.ts';
 
 export type Event = {
   id: number;
@@ -9,3 +10,5 @@ export type Event = {
   endDate: string;
   cost: Cost[];
 };
+
+export type GetMyAllEventsResponse = SuccessResponse<Event[]>;

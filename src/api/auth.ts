@@ -1,12 +1,17 @@
-import type { GetAuthenticatedUserResponse, LogoutResponse } from '../types/auth.ts';
-import { httpClient } from './http/httpClient.ts';
+import { AuthError } from '../errors/customErrors.ts';
+import type { GetUserResponse, LogoutResponse } from '../types/auth.ts';
+import type { User } from '../types/user.ts';
+import { authenticatedClient } from './client/authenticatedClient.ts';
+import { unauthenticatedClient } from './client/unauthenticatedClient.ts';
+import { requestHandler } from './util/requestHandler.ts';
 
-export const getAuthenticatedUserApi = async (): Promise<GetAuthenticatedUserResponse> => {
-  const { data } = await httpClient.get<GetAuthenticatedUserResponse>('/auth/user');
-  return data;
+export const getUserApi = async (): Promise<User> => {
+  return requestHandler(() => authenticatedClient.get<GetUserResponse>('/auth/user'), AuthError);
 };
 
-export const logoutApi = async (): Promise<LogoutResponse> => {
-  const { data } = await httpClient.post<LogoutResponse>('/auth/logout');
-  return data;
+export const logoutApi = async (): Promise<null> => {
+  return requestHandler(
+    () => unauthenticatedClient.post<LogoutResponse>('/auth/logout'),
+    AuthError
+  );
 };

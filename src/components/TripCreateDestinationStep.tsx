@@ -1,39 +1,30 @@
 import { useState } from 'react';
-import { DESTINATIONS, type RegionType } from '../constants/destinations.ts';
+import { DESTINATIONS, type DestinationType } from '../constants/destinations.ts';
 import { type TripFormValues } from '../schemas/tripSchema.ts';
-import { type UseFormReturn } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import { ChevronDownIcon } from 'lucide-react';
+import type { DestinationKey } from '../constants/tripImages.ts';
 
-interface TripCreateStepFirstFormProps {
+interface TripCreateDestinationStepProps {
   setStep: (step: number) => void;
-  form: UseFormReturn<TripFormValues>;
 }
 
-export const TripCreateStepFirstForm = ({ setStep, form }: TripCreateStepFirstFormProps) => {
-  const { setValue, watch, getValues } = form;
+export const TripCreateDestinationStep = ({ setStep }: TripCreateDestinationStepProps) => {
+  const { setValue, watch } = useFormContext<TripFormValues>();
   const [isRegionSelectOpen, setIsRegionSelectOpen] = useState<boolean>(false);
   const [isDestinationSelectOpen, setIsDestinationSelectOpen] = useState<boolean>(false);
 
+  const destinationType = watch('destinationType');
   const destination = watch('destination');
-  const isStep1Valid = Boolean(destination);
+  const isStep1Valid = Boolean(destinationType && destination);
+  const destinationOptions = destinationType ? Object.entries(DESTINATIONS[destinationType]) : [];
+  const isDestinationSelectDisabled = !destinationType;
 
-  const [regionType, setRegionType] = useState<RegionType | ''>(() => {
-    const savedDestination = getValues('destination');
-
-    if (!savedDestination) return '';
-
-    if (Object.keys(DESTINATIONS.domestic).includes(savedDestination)) {
-      return 'domestic';
-    }
-    if (Object.keys(DESTINATIONS.overseas).includes(savedDestination)) {
-      return 'overseas';
-    }
-    return '';
-  });
-
-  const destinationOptions = regionType ? Object.entries(DESTINATIONS[regionType]) : [];
-
-  const isDestinationSelectDisabled = !regionType;
+  const handleDestinationTypeChange = (type: DestinationType) => {
+    setValue('destinationType', type);
+    setValue('destination', '' as DestinationKey);
+    setIsRegionSelectOpen(false);
+  };
   return (
     <div className="flex flex-col h-full">
       <div className="flex gap-2 items-center mt-4 mx-4 min-h-[70px]">
@@ -48,9 +39,9 @@ export const TripCreateStepFirstForm = ({ setStep, form }: TripCreateStepFirstFo
             className="flex items-center gap-2 border-2 border-gray-200 hover:border-primary-base cursor-pointer p-2 rounded-md justify-between w-full"
           >
             <span>
-              {regionType === 'domestic'
+              {destinationType === 'domestic'
                 ? '국내'
-                : regionType === 'overseas'
+                : destinationType === 'overseas'
                   ? '해외'
                   : '국내/해외'}
             </span>
@@ -60,22 +51,14 @@ export const TripCreateStepFirstForm = ({ setStep, form }: TripCreateStepFirstFo
             <div className="absolute z-10 top-full left-0 flex flex-col shadow-2xl w-full bg-white rounded-md p-1">
               <button
                 type="button"
-                onClick={() => {
-                  setRegionType('domestic');
-                  setIsRegionSelectOpen(false);
-                  setValue('destination', '');
-                }}
+                onClick={() => handleDestinationTypeChange('domestic')}
                 className="mt-1 hover:bg-gray-100 block w-full text-left p-2 rounded-md"
               >
                 국내
               </button>
               <button
                 type="button"
-                onClick={() => {
-                  setRegionType('overseas');
-                  setIsRegionSelectOpen(false);
-                  setValue('destination', '');
-                }}
+                onClick={() => handleDestinationTypeChange('overseas')}
                 className="block w-full text-left p-2 rounded-md hover:bg-gray-100"
               >
                 해외
@@ -99,12 +82,12 @@ ${
 }
 `}
           >
-            <span>
-              {destination
-                ? DESTINATIONS[regionType as RegionType]?.[destination]
-                : regionType === 'domestic'
+            <span className={destination ? 'text-black' : 'text-gray-400'}>
+              {destination && destinationType
+                ? DESTINATIONS[destinationType]?.[destination] // 화면에 보여줄 땐 한글 이름(Value)
+                : destinationType === 'domestic'
                   ? '국내 도시 선택'
-                  : regionType === 'overseas'
+                  : destinationType === 'overseas'
                     ? '해외 국가 선택'
                     : '도시/국가 선택'}
             </span>
@@ -117,8 +100,7 @@ ${
                   key={value}
                   type="button"
                   onClick={() => {
-                    setValue('destination', value);
-
+                    setValue('destination', value as DestinationKey);
                     setIsDestinationSelectOpen(false);
                   }}
                   className="px-2 py-2 rounded-md hover:bg-gray-100 text-left cursor-pointer w-full"

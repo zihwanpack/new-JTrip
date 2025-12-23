@@ -1,16 +1,14 @@
-import type { UseFormReturn } from 'react-hook-form';
-import type { EventFormValues } from '../schemas/eventSchema.ts';
+import { useFormContext } from 'react-hook-form';
 
-interface EventCreateSecondFormProps {
+interface EventCreateDateStepProps {
   setStep: (step: number) => void;
-  form: UseFormReturn<EventFormValues>;
 }
-export const EventCreateSecondForm = ({ setStep, form }: EventCreateSecondFormProps) => {
+export const EventCreateDateStep = ({ setStep }: EventCreateDateStepProps) => {
   const {
     watch,
     formState: { errors },
     setValue,
-  } = form;
+  } = useFormContext();
 
   const startDate = watch('startDate');
   const endDate = watch('endDate');

@@ -1,3 +1,5 @@
+import type { SuccessResponse } from './defaultResponse.ts';
+
 export type Provider = 'google' | 'kakao' | 'naver';
 
 export type User = {
@@ -11,9 +13,8 @@ export type User = {
   createdBy?: string;
 };
 
-export type UserSearchResponse = Pick<User, 'id' | 'email' | 'nickname' | 'provider' | 'userImage'>;
+export type UserSummary = Pick<User, 'id' | 'email' | 'nickname' | 'provider' | 'userImage'>;
 
-export type GetUsersByEmailApiResponse = Pick<
-  User,
-  'id' | 'email' | 'nickname' | 'provider' | 'userImage'
->[];
+export type SearchUsersResponse = SuccessResponse<UserSummary[]>;
+
+export type GetUsersByEmailResponse = SuccessResponse<UserSummary[]>;

@@ -1,13 +1,13 @@
 import { Outlet, Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-import { Loader } from '../components/Loader.tsx';
+import { FullscreenLoader } from '../components/FullscreenLoader.tsx';
 
 export const ProtectedLayout = () => {
   const { user, loading } = useAuth();
   const location = useLocation();
 
   if (loading) {
-    return <Loader />;
+    return <FullscreenLoader />;
   }
 
   if (!user) {

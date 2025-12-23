@@ -1,19 +1,15 @@
 import axios, { type InternalAxiosRequestConfig } from 'axios';
-import { camelCaseKeys } from '../../utils/camelCaseKeys';
 interface CustomInternalAxiosRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean;
 }
 
-export const httpClient = axios.create({
+export const authenticatedClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   withCredentials: true,
 });
 
-httpClient.interceptors.response.use(
+authenticatedClient.interceptors.response.use(
   (response) => {
-    if (response.data) {
-      response.data = camelCaseKeys(response.data);
-    }
     return response;
   },
   async (error) => {
@@ -29,8 +25,8 @@ httpClient.interceptors.response.use(
     if (error.response?.status === 401 && !original._retry) {
       original._retry = true;
       try {
-        await httpClient.post('/auth/token');
-        return httpClient(original);
+        await authenticatedClient.post('/auth/token');
+        return authenticatedClient(original);
       } catch (err) {
         return Promise.reject(err);
       }
