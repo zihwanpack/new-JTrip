@@ -1,46 +1,36 @@
-import type { UseFormReturn } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import type { TripFormValues } from '../schemas/tripSchema.ts';
-import type { TripCreateRequest } from '../types/trip.ts';
 import { createTripApi } from '../api/trip.ts';
-import { useState } from 'react';
-import TripError from '../errors/TripError.ts';
-import { snakeCaseKeys } from '../utils/snakeCaseFormatter.ts';
-import { TRIP_CREATE_FORM_SESSION_STORAGE_KEY } from '../constants/tripCreateFormSessionKey.ts';
 import { useNavigate } from 'react-router-dom';
+import { TRIP_CREATE_STEP_KEY } from '../constants/trip.ts';
+import { useCreateAction } from '../hooks/useCreateAction.tsx';
 
-interface TripCreateFourthFormProps {
+interface TripCreateTitleAndSubmitStepProps {
   setStep: (step: number) => void;
-  form: UseFormReturn<TripFormValues>;
 }
 
-export const TripCreateFourthForm = ({ setStep, form }: TripCreateFourthFormProps) => {
+export const TripCreateTitleAndSubmitStep = ({ setStep }: TripCreateTitleAndSubmitStepProps) => {
   const {
     register,
     watch,
     getValues,
     formState: { errors },
-  } = form;
+  } = useFormContext<TripFormValues>();
+
   const navigate = useNavigate();
   const title = watch('title');
   const isStep4Valid = title && title.trim().length > 0;
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<TripError | null>(null);
 
+  const {
+    execute,
+    isLoading: isCreateTripLoading,
+    error: createTripError,
+  } = useCreateAction(createTripApi);
   const handleCreateTrip = async () => {
     const formData = getValues();
-    setIsLoading(true);
-    setError(null);
-    const apiData = snakeCaseKeys<TripCreateRequest>(formData);
-
-    try {
-      const { id } = await createTripApi(apiData);
-      sessionStorage.removeItem(TRIP_CREATE_FORM_SESSION_STORAGE_KEY);
-      navigate(`/trips/${id}`);
-    } catch (err) {
-      setError(err instanceof TripError ? err : new TripError('여행 추가 실패', 500));
-    } finally {
-      setIsLoading(false);
-    }
+    const { id } = await execute(formData);
+    sessionStorage.removeItem(TRIP_CREATE_STEP_KEY);
+    navigate(`/trips/${id}`);
   };
 
   return (
@@ -59,7 +49,9 @@ export const TripCreateFourthForm = ({ setStep, form }: TripCreateFourthFormProp
       </div>
       <div className="mx-4 mt-1 min-h-[20px]">
         {errors.title && <p className="text-sm text-red-500 pl-1">{errors.title.message}</p>}
-        {!errors.title && error && <p className="text-sm text-red-500 pl-1">{error.message}</p>}
+        {!errors.title && createTripError && (
+          <p className="text-sm text-red-500 pl-1">{createTripError.message}</p>
+        )}
       </div>
       <div className="flex-1" />
       <div className="flex gap-3 mb-4 px-4">
@@ -72,7 +64,7 @@ export const TripCreateFourthForm = ({ setStep, form }: TripCreateFourthFormProp
         </button>
         <button
           type="button"
-          disabled={!isStep4Valid || isLoading}
+          disabled={!isStep4Valid || isCreateTripLoading}
           onClick={() => {
             if (!isStep4Valid) return;
             handleCreateTrip();
@@ -86,7 +78,7 @@ export const TripCreateFourthForm = ({ setStep, form }: TripCreateFourthFormProp
             }
           `}
         >
-          {isLoading ? '여행 추가 중...' : '여행 추가'}
+          {isCreateTripLoading ? '여행 추가 중...' : '여행 추가'}
         </button>
       </div>
     </div>

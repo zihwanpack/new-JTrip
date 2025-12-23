@@ -1,62 +1,46 @@
 import { Search, Loader2, X, UserPlus, Check } from 'lucide-react';
-import { type UseFormReturn } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import type { TripFormValues } from '../schemas/tripSchema.ts';
-import { useEffect, useState } from 'react';
-import type { GetUsersByEmailApiResponse, UserSearchResponse } from '../types/user.ts';
+import { useState } from 'react';
+import type { UserSummary } from '../types/user.ts';
 import { getSearchUsersApi, getUsersByEmailApi } from '../api/user.ts';
 import { useDebounce } from '../hooks/useDebounce.tsx';
-import TripError from '../errors/TripError.ts';
 import { useAuth } from '../hooks/useAuth.tsx';
 import { useFetch } from '../hooks/useFetch.tsx';
-import type UserError from '../errors/UserError.ts';
+import { UserError, TripError } from '../errors/customErrors.ts';
 
-interface TripCreateStepThirdFormProps {
+interface TripCreateMembersStepProps {
   setStep: (step: number) => void;
-  form: UseFormReturn<TripFormValues>;
 }
 
-export const TripCreateStepThirdForm = ({ setStep, form }: TripCreateStepThirdFormProps) => {
-  const { setValue } = form;
+export const TripCreateMembersStep = ({ setStep }: TripCreateMembersStepProps) => {
+  const { setValue, watch } = useFormContext<TripFormValues>();
 
   const { user: currentUser } = useAuth();
 
-  const members = form.watch('members') || [];
+  const members = watch('members') || [];
   const [searchValue, setSearchValue] = useState<string>('');
 
   const debouncedSearchValue = useDebounce(searchValue, 300);
-  const [users, setUsers] = useState<UserSearchResponse[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<TripError | null>(null);
 
-  useEffect(() => {
-    const searchUsers = async () => {
-      if (!debouncedSearchValue.trim()) {
-        setUsers([]);
-        return;
-      }
+  const {
+    data: users = [],
+    isLoading,
+    error,
+  } = useFetch<UserSummary[], TripError>([debouncedSearchValue, currentUser?.email], async () => {
+    if (!debouncedSearchValue.trim()) {
+      return [];
+    }
 
-      setIsLoading(true);
-      setError(null);
-      try {
-        const data = await getSearchUsersApi(debouncedSearchValue);
-        const filteredData = data.filter((u) => u.email !== currentUser?.email);
-        setUsers(filteredData);
-      } catch (err) {
-        setError(err instanceof TripError ? err : new TripError('검색 실패', 500));
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    const data = await getSearchUsersApi(debouncedSearchValue);
+    return data.filter((u) => u.email !== currentUser?.email);
+  });
 
-    searchUsers();
-  }, [debouncedSearchValue, currentUser?.email]);
-
-  const addMember = (user: UserSearchResponse) => {
+  const addMember = (user: UserSummary) => {
     if (!members.includes(user.email)) {
       setValue('members', [...members, user.email]);
     }
     setSearchValue('');
-    setUsers([]);
   };
 
   const removeMember = (targetName: string) => {
@@ -66,7 +50,7 @@ export const TripCreateStepThirdForm = ({ setStep, form }: TripCreateStepThirdFo
     );
   };
 
-  const { data: usersData } = useFetch<GetUsersByEmailApiResponse, UserError>(
+  const { data: usersData, isLoading: isUsersLoading } = useFetch<UserSummary[], UserError>(
     [members],
     async () => {
       if (!members || members.length === 0) {
@@ -95,7 +79,7 @@ export const TripCreateStepThirdForm = ({ setStep, form }: TripCreateStepThirdFo
           />
           {isLoading && <Loader2 className="size-5 text-primary-base animate-spin" />}
         </div>
-        {debouncedSearchValue && users.length > 0 && (
+        {debouncedSearchValue && users && users.length > 0 && (
           <div className="absolute top-full left-0 w-full mt-2 bg-white border border-gray-100 rounded-lg shadow-xl max-h-60 z-50">
             {users.map((user) => {
               const isAdded = members.includes(user.email);
@@ -125,7 +109,7 @@ export const TripCreateStepThirdForm = ({ setStep, form }: TripCreateStepThirdFo
             })}
           </div>
         )}
-        {searchValue && debouncedSearchValue && !isLoading && users.length === 0 && (
+        {searchValue && debouncedSearchValue && !isLoading && users && users.length === 0 && (
           <div className="absolute top-full left-0 w-full mt-2 bg-white border border-gray-100 rounded-lg shadow-md p-4 text-center text-gray-400 text-sm z-50">
             검색 결과가 없습니다.
           </div>
@@ -139,14 +123,22 @@ export const TripCreateStepThirdForm = ({ setStep, form }: TripCreateStepThirdFo
             key={member}
             className="flex items-center gap-1 pl-3 pr-2 py-1.5 bg-primary-dark text-white rounded-full text-sm font-medium border border-blue-100 cursor-pointer"
           >
-            <span>{usersData?.find((user) => user.email === member)?.nickname}</span>
-            <button
-              type="button"
-              onClick={() => removeMember(member)}
-              className="p-0.5 hover:bg-primary-dark rounded-full transition-colors cursor-pointer"
-            >
-              <X size={14} />
-            </button>
+            {isUsersLoading ? (
+              <div className="flex items-center gap-2">
+                <div className="w-12 h-3 bg-white/40 rounded animate-pulse" />
+              </div>
+            ) : (
+              <>
+                <span>{usersData?.find((user) => user.email === member)?.nickname}</span>
+                <button
+                  type="button"
+                  onClick={() => removeMember(member)}
+                  className="p-0.5 hover:bg-primary-dark rounded-full transition-colors cursor-pointer"
+                >
+                  <X size={14} />
+                </button>
+              </>
+            )}
           </div>
         ))}
       </div>

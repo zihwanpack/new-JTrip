@@ -1,16 +1,15 @@
-import { type UseFormReturn } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 
 import { DayPicker } from 'react-day-picker';
 import { ko } from 'date-fns/locale';
 import type { TripFormValues } from '../schemas/tripSchema.ts';
 
-interface TripCreateStepSecondFormProps {
+interface TripCreateDateStepProps {
   setStep: (step: number) => void;
-  form: UseFormReturn<TripFormValues>;
 }
 
-export const TripCreateStepSecondForm = ({ setStep, form }: TripCreateStepSecondFormProps) => {
-  const { setValue, watch } = form;
+export const TripCreateDateStep = ({ setStep }: TripCreateDateStepProps) => {
+  const { setValue, watch } = useFormContext<TripFormValues>();
 
   const startDate = watch('startDate');
   const endDate = watch('endDate');
