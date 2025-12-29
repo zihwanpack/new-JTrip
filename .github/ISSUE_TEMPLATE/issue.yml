@@ -26,7 +26,6 @@ body:
         - 기존 기능의 불편한 점 또는 개선 이유
         - 해결하지 않았을 경우 예상되는 문제
         - 개선 후 기대되는 효과
-      render: markdown
     validations:
       required: true
 
@@ -43,7 +42,6 @@ body:
         - [ ] 기능 개발
         - [ ] 테스트 및 검증
         - [ ] 문서 업데이트
-      render: markdown
     validations:
       required: true
 
@@ -70,7 +68,6 @@ body:
         - 기능이 명세대로 동작한다.
         - 오류 로그가 발생하지 않는다.
         - UX 시나리오 테스트에서 모든 케이스 통과.
-      render: markdown
     validations:
       required: true
 
