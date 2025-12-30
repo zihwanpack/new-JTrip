@@ -1,5 +1,5 @@
 import type { DestinationKey } from '../constants/tripImages.ts';
-import type { SuccessResponse } from './defaultResponse.ts';
+import type { CursorResponse, SuccessResponse } from './defaultResponse.ts';
 
 export type DestinationType = 'domestic' | 'overseas';
 
@@ -40,3 +40,14 @@ export type GetMyPastTripsParam = GetTripDetailParam;
 export type GetMyOnGoingTripParam = GetTripDetailParam;
 
 export type GetMyUpcomingTripsParam = GetTripDetailParam;
+
+export type GetMyPastTripsByCursorParam = GetTripDetailParam & {
+  cursor: number | null;
+  limit?: number;
+};
+
+export type GetMyPastTripsByCursorResponse = CursorResponse<Trip>;
+
+export type GetMyUpcomingTripsByCursorParam = GetMyPastTripsByCursorParam;
+
+export type GetMyUpcomingTripsByCursorResponse = GetMyPastTripsByCursorResponse;

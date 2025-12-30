@@ -8,8 +8,10 @@ type HeaderProps = {
 
 export const Header = ({ title, onClose }: HeaderProps) => {
   return (
-    <header className="flex items-center justify-between h-14 px-4 bg-white">
-      <div className="w-6" />
+    <header
+      className={`flex items-center h-14 px-4 bg-white ${onClose ? 'justify-between' : 'justify-center'}`}
+    >
+      <div className="w-1" />
       <h1 className="text-lg font-semibold text-gray-900">{title}</h1>
       {onClose && (
         <Button

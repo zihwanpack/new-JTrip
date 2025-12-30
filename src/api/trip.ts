@@ -6,8 +6,12 @@ import type {
   DeleteTripResponse,
   GetMyOnGoingTripParam,
   GetMyOnGoingTripResponse,
+  GetMyPastTripsByCursorParam,
+  GetMyPastTripsByCursorResponse,
   GetMyPastTripsParam,
   GetMyPastTripsResponse,
+  GetMyUpcomingTripsByCursorParam,
+  GetMyUpcomingTripsByCursorResponse,
   GetMyUpcomingTripsParam,
   GetMyUpcomingTripsResponse,
   GetTripDetailParam,
@@ -55,6 +59,36 @@ export const getMyOnGoingTripApi = async ({ id }: GetMyOnGoingTripParam): Promis
 export const getMyUpcomingTripsApi = async ({ id }: GetMyUpcomingTripsParam): Promise<Trip[]> => {
   return requestHandler(
     () => authenticatedClient.get<GetMyUpcomingTripsResponse>(`/trips/user/${id}/upcoming`),
+    TripError
+  );
+};
+
+export const getMyPastTripsCursorApi = async ({
+  id,
+  cursor,
+  limit,
+}: GetMyPastTripsByCursorParam): Promise<GetMyPastTripsByCursorResponse['result']> => {
+  const cursorParam = cursor !== null ? `cursor=${cursor}&` : '';
+  return requestHandler(
+    () =>
+      authenticatedClient.get<GetMyPastTripsByCursorResponse>(
+        `/trips/user/${id}/past/cursor?${cursorParam}limit=${limit}`
+      ),
+    TripError
+  );
+};
+
+export const getMyUpcomingTripsCursorApi = async ({
+  id,
+  cursor,
+  limit,
+}: GetMyUpcomingTripsByCursorParam): Promise<GetMyUpcomingTripsByCursorResponse['result']> => {
+  const cursorParam = cursor !== null ? `cursor=${cursor}&` : '';
+  return requestHandler(
+    () =>
+      authenticatedClient.get<GetMyUpcomingTripsByCursorResponse>(
+        `/trips/user/${id}/upcoming/cursor?${cursorParam}limit=${limit}`
+      ),
     TripError
   );
 };

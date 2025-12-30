@@ -11,3 +11,17 @@ export type ErrorResponse = {
   message: string;
   result: null;
 };
+
+export type CursorResponse<T> = {
+  isSuccess: boolean;
+  code: string;
+  message: string;
+  result: {
+    items: T[];
+    pagination: {
+      hasNext: boolean;
+      nextCursor: number | null;
+      limit: number;
+    };
+  };
+};
