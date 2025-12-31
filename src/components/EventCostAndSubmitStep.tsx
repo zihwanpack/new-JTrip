@@ -28,25 +28,31 @@ export const EventCostAndSubmitStep = ({ setStep }: EventCostAndSubmitStepProps)
     setValue(
       'cost',
       produce<EventFormValues['cost']>(costs, (draft) => {
-        draft.push({ category: '', value: 0 });
+        draft.push({ id: Date.now(), category: '', value: 0 });
       })
     );
   };
 
-  const updateCost = (index: number, updated: Partial<(typeof costs)[number]>) => {
+  const updateCost = (id: number, updated: Partial<(typeof costs)[number]>) => {
     setValue(
       'cost',
-      produce<EventFormValues['cost']>(costs, (draft) => {
-        draft[index] = { ...draft[index], ...updated };
+      produce(costs, (draft) => {
+        const index = draft.findIndex((item) => item.id === id);
+        if (index !== -1) {
+          draft[index] = { ...draft[index], ...updated };
+        }
       })
     );
   };
 
-  const removeCost = (index: number) => {
+  const removeCost = (id: number) => {
     setValue(
       'cost',
       produce<EventFormValues['cost']>(costs, (draft) => {
-        draft.splice(index, 1);
+        draft.splice(
+          draft.findIndex((item) => item.id === id),
+          1
+        );
       })
     );
   };
@@ -69,15 +75,15 @@ export const EventCostAndSubmitStep = ({ setStep }: EventCostAndSubmitStepProps)
     <div className="flex flex-col h-full">
       <div className="flex gap-2 items-center mt-4 mx-4 min-h-[70px]">
         <h1 className="text-xl font-semibold">경비</h1>
-        <p className="text-sm text-primary-base">필수</p>
+        <p className="text-sm text-primary-base">선택</p>
       </div>
       <div className="mx-4 space-y-3">
-        {costs.map((item, index) => (
-          <div key={index} className="flex gap-2 items-center">
+        {costs.map((item) => (
+          <div key={item.id} className="flex gap-2 items-center">
             <div className="relative flex-1">
               <Button
                 type="button"
-                onClick={() => setOpenIndex(openIndex === index ? null : index)}
+                onClick={() => setOpenIndex(openIndex === item.id ? null : item.id)}
                 className={`
           flex items-center justify-between gap-2
           border-2 rounded-xl p-3 w-full text-sm
@@ -88,14 +94,14 @@ export const EventCostAndSubmitStep = ({ setStep }: EventCostAndSubmitStepProps)
                 <ChevronDownIcon className="size-4" />
               </Button>
 
-              {openIndex === index && (
+              {openIndex === item.id && (
                 <div className="absolute z-10 top-full left-0 mt-1 w-full bg-white rounded-xl shadow-xl p-1">
                   {COST_CATEGORIES.map((cost) => (
                     <Button
                       key={cost}
                       type="button"
                       onClick={() => {
-                        updateCost(index, { category: cost });
+                        updateCost(item.id, { category: cost });
                         setOpenIndex(null);
                       }}
                       className="w-full text-left px-3 py-2 rounded-lg hover:bg-gray-100"
@@ -114,7 +120,7 @@ export const EventCostAndSubmitStep = ({ setStep }: EventCostAndSubmitStepProps)
                 placeholder="0"
                 value={item.value ? String(item.value) : ''}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  updateCost(index, { value: Number(e.target.value) })
+                  updateCost(item.id, { value: Number(e.target.value) })
                 }
                 className="py-3 text-right"
               />
@@ -123,7 +129,7 @@ export const EventCostAndSubmitStep = ({ setStep }: EventCostAndSubmitStepProps)
 
             <Button
               type="button"
-              onClick={() => removeCost(index)}
+              onClick={() => removeCost(item.id)}
               className="p-3 rounded-xl bg-gray-100 hover:bg-gray-200"
             >
               <Trash2 size={18} />

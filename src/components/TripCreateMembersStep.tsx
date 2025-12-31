@@ -28,6 +28,7 @@ export const TripCreateMembersStep = ({ setStep }: TripCreateMembersStepProps) =
   const [users, setUsers] = useState<UserSummary[]>([]);
   const [isSearchUsersLoading, setIsSearchUsersLoading] = useState(false);
   const [searchUsersError, setSearchUsersError] = useState<UserError | null>(null);
+  const [selectedMembers, setSelectedMembers] = useState<UserSummary[]>([]);
 
   useEffect(() => {
     if (!debouncedSearchValue.trim()) {
@@ -65,17 +66,18 @@ export const TripCreateMembersStep = ({ setStep }: TripCreateMembersStepProps) =
   const addMember = (user: UserSummary) => {
     if (!members.includes(user.email)) {
       setValue('members', [...members, user.email]);
+      setSelectedMembers((prev) => [...prev, user]);
     }
     setSearchValue('');
   };
-
-  const removeMember = (targetName: string) => {
+  const removeMember = (email: string) => {
     setValue(
       'members',
-      members.filter((m) => m !== targetName)
+      members.filter((m) => m !== email)
     );
-  };
 
+    setSelectedMembers((prev) => prev.filter((u) => u.email !== email));
+  };
   return (
     <div className="flex flex-col h-full">
       <div className="flex gap-2 flex-col justify-center mt-4 mx-4 min-h-[70px]">
@@ -84,9 +86,10 @@ export const TripCreateMembersStep = ({ setStep }: TripCreateMembersStepProps) =
       </div>
 
       <div className="mx-4 mt-6 relative z-20">
-        <div className="flex items-center gap-3 border border-gray-300 rounded-lg px-4 py-3 focus-within:ring-2 focus-within:ring-primary-base focus-within:border-transparent transition-all bg-white">
+        <div className="flex items-center justify-start gap-3 border border-gray-300 rounded-lg px-4 py-3 focus-within:ring-2 focus-within:ring-primary-base focus-within:border-transparent transition-all bg-white">
           <Search className="size-5 text-gray-400" />
           <Input
+            containerClassName="min-w-4/5"
             type="text"
             value={searchValue}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchValue(e.target.value)}
@@ -139,27 +142,19 @@ export const TripCreateMembersStep = ({ setStep }: TripCreateMembersStepProps) =
       </div>
 
       <div className="mx-4 mt-80 flex flex-wrap gap-2">
-        {members.map((member) => (
+        {selectedMembers.map((member) => (
           <div
-            key={member}
+            key={member.email}
             className="flex items-center gap-1 pl-3 pr-2 py-1.5 bg-primary-dark text-white rounded-full text-sm font-medium border border-blue-100 cursor-pointer"
           >
-            {isSearchUsersLoading ? (
-              <div className="flex items-center gap-2">
-                <div className="w-12 h-3 bg-white/40 rounded animate-pulse" />
-              </div>
-            ) : (
-              <>
-                <span>{users?.find((user) => user.email === member)?.nickname}</span>
-                <Button
-                  type="button"
-                  onClick={() => removeMember(member)}
-                  className="p-0.5 hover:bg-primary-dark rounded-full transition-colors cursor-pointer"
-                >
-                  <X size={14} />
-                </Button>
-              </>
-            )}
+            <span>{member.nickname}</span>
+            <Button
+              type="button"
+              onClick={() => removeMember(member.email)}
+              className="p-0.5 hover:bg-primary-dark rounded-full transition-colors cursor-pointer"
+            >
+              <X size={14} />
+            </Button>
           </div>
         ))}
       </div>

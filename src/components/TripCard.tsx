@@ -41,7 +41,7 @@ const TRIP_CARD_STYLES = {
     date: 'text-[16px]',
   },
   myTrips: {
-    container: 'w-full h-[100px]',
+    container: 'w-full min-h-[100px]',
     title: 'text-[16px]',
     date: 'text-[13px]',
   },
@@ -112,7 +112,7 @@ export const TripCard = ({
   }
 
   return (
-    <Card onClick={onClick} className={`relative ${cardStyles.container}`}>
+    <Card onClick={onClick} className={`relative   ${cardStyles.container}`}>
       <img
         src={tripImage}
         alt={`${title} 여행 이미지`}
