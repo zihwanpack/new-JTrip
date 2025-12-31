@@ -10,6 +10,7 @@ export const eventSchema = z.object({
   endDate: z.string().min(1, '도착일을 선택해주세요'),
   cost: z.array(
     z.object({
+      id: z.number(),
       category: z.string().min(1, '카테고리를 선택해주세요'),
       value: z.number().min(1, '값을 입력해주세요'),
     })
