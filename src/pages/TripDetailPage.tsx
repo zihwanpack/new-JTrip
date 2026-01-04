@@ -26,7 +26,7 @@ import {
   type TripState,
 } from '../redux/slices/tripSlice.ts';
 import { fetchAllEvents, type EventState } from '../redux/slices/eventSlice.ts';
-import { getUsersByEmails, type UserState } from '../redux/slices/userSlice.ts';
+import { clearUsersByEmails, getUsersByEmails, type UserState } from '../redux/slices/userSlice.ts';
 import toast from 'react-hot-toast';
 
 export const TripDetailPage = () => {
@@ -58,6 +58,9 @@ export const TripDetailPage = () => {
   useEffect(() => {
     if (!tripDetail?.members) return;
     dispatch(getUsersByEmails(tripDetail.members));
+    return () => {
+      dispatch(clearUsersByEmails());
+    };
   }, [dispatch, tripDetail?.members]);
 
   const [selectedDate, setSelectedDate] = useState<string | null>(null);

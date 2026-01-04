@@ -14,6 +14,7 @@ import { ConfirmModal } from '../components/ConfirmModal.tsx';
 import { useDispatch } from '../redux/hooks/useCustomRedux.tsx';
 import { resetTripState } from '../redux/slices/tripSlice.ts';
 import { resetEventState } from '../redux/slices/eventSlice.ts';
+import { resetUserState } from '../redux/slices/userSlice.ts';
 
 export const Mypage = () => {
   const { user, logout } = useAuth();
@@ -37,6 +38,7 @@ export const Mypage = () => {
       await logout();
       dispatch(resetEventState());
       dispatch(resetTripState());
+      dispatch(resetUserState());
       sessionStorage.clear();
       navigate('/login');
     } catch {
@@ -50,6 +52,7 @@ export const Mypage = () => {
       await withdrawApi({ id: user.id });
       dispatch(resetEventState());
       dispatch(resetTripState());
+      dispatch(resetUserState());
       sessionStorage.clear();
       navigate('/login');
       toast.success('회원탈퇴가 완료되었습니다.');
