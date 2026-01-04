@@ -28,7 +28,18 @@ export const CTA = ({
       setStep(currentStep + 1);
     }
   };
-  const isButtonEnabled = !isNecessary || isValid;
+  const isDisabled = isLoading || (isNecessary && !isValid);
+  const buttonVariant = isDisabled ? 'secondary' : 'primary';
+
+  let buttonText: string = '다음';
+
+  if (isLastStep) {
+    buttonText = '추가하기';
+  }
+
+  if (isLoading) {
+    buttonText = '추가중...';
+  }
 
   return (
     <div className="flex gap-3 mb-4 px-4">
@@ -47,11 +58,11 @@ export const CTA = ({
       <Button
         type="button"
         onClick={handleNextOrSubmit}
-        variant={isNecessary ? (isValid ? 'primary' : 'secondary') : 'primary'}
-        disabled={!isButtonEnabled || isLoading}
+        variant={buttonVariant}
+        disabled={isDisabled}
         className="w-full rounded-md  font-semibold transition m-1 cursor-pointer"
       >
-        {isLoading ? '추가중...' : isLastStep ? '추가하기' : '다음'}
+        {buttonText}
       </Button>
     </div>
   );
