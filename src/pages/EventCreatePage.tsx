@@ -54,7 +54,7 @@ export const EventCreatePage = () => {
   }, [form]);
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-dvh">
       <Header title="이벤트 추가하기" onClose={handleCloseForm} />
       <ProgressBar progress={step} steps={EVENT_CREATE_TOTAL_STEPS} />
       <FormProvider {...form}>

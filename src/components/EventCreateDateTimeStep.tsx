@@ -8,7 +8,7 @@ import { useRef, useState, useEffect } from 'react';
 import { formatDate, formatTimeDisplay } from '../utils/date.ts';
 import { Button } from './Button.tsx';
 import type { EventFormValues } from '../schemas/eventSchema.ts';
-import { useDispatch, useSelector } from '../hooks/useCustomRedux.tsx';
+import { useDispatch, useSelector } from '../redux/hooks/useCustomRedux.tsx';
 import { fetchTripDetail, type TripState } from '../redux/slices/tripSlice.ts';
 
 interface EventCreateDateTimeStepProps {
@@ -147,7 +147,6 @@ export const EventCreateDateTimeStep = ({ setStep }: EventCreateDateTimeStepProp
           onClose={() => setActiveDate(null)}
         />
       )}
-
       <div className="flex-1" />
       <CTA isValid={isDateStepValid} setStep={setStep} currentStep={2} />
     </div>
