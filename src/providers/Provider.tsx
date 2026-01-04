@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { PropsWithChildren } from 'react';
 import { AuthProvider } from '../context/AuthContext.tsx';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { store } from '../redux/slices/store.ts';
+import { store } from '../redux/store.ts';
 import { Provider as ReduxProvider } from 'react-redux';
 
 const queryClient = new QueryClient({

@@ -7,7 +7,7 @@ import { formatDateRange } from '../utils/date.ts';
 import { getWelcomeMessage } from '../utils/getWelcomeMessage.ts';
 import { Footer } from '../layouts/Footer.tsx';
 import { FullscreenLoader } from '../components/FullscreenLoader.tsx';
-import { useSelector, useDispatch } from '../hooks/useCustomRedux.tsx';
+import { useSelector, useDispatch } from '../redux/hooks/useCustomRedux.tsx';
 import { fetchAllMyTrips, type TripState } from '../redux/slices/tripSlice.ts';
 import { useEffect } from 'react';
 

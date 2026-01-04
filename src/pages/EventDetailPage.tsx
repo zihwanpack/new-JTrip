@@ -6,13 +6,17 @@ import { Header } from '../layouts/Header.tsx';
 import { Button } from '../components/Button.tsx';
 import { FullscreenLoader } from '../components/FullscreenLoader.tsx';
 
-import { useDispatch, useSelector } from '../hooks/useCustomRedux.tsx';
-import { fetchEventDetail, type EventState } from '../redux/slices/eventSlice.ts';
+import { useDispatch, useSelector } from '../redux/hooks/useCustomRedux.tsx';
+import {
+  deleteEvent,
+  fetchEventDetail,
+  clearEventDetail,
+  type EventState,
+} from '../redux/slices/eventSlice.ts';
 
 import { formatDate } from '../utils/date.ts';
 import { getTotal } from '../utils/getTotal.ts';
 import toast from 'react-hot-toast';
-import { deleteEventApi } from '../api/event.ts';
 
 export const EventDetailPage = () => {
   const { eventId, tripId } = useParams();
@@ -27,15 +31,17 @@ export const EventDetailPage = () => {
     if (eventId) {
       dispatch(fetchEventDetail({ id: Number(eventId) }));
     }
+    return () => {
+      dispatch(clearEventDetail());
+    };
   }, [eventId, dispatch]);
 
   const deleteEventHandler = async () => {
-    try {
-      await deleteEventApi({ id: Number(eventId) });
+    const result = await dispatch(deleteEvent({ id: Number(eventId) }));
+    if (deleteEvent.fulfilled.match(result)) {
       toast.success('이벤트 삭제에 성공했습니다.');
       navigate(`/trips/${tripId}`);
-    } catch (error) {
-      console.error(error);
+    } else {
       toast.error('이벤트 삭제에 실패했습니다.');
     }
   };

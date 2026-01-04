@@ -5,11 +5,12 @@ import { Trash2, Plus, ChevronDownIcon } from 'lucide-react';
 import { Button } from './Button.tsx';
 import { useState } from 'react';
 import { produce } from 'immer';
-import { useCreateAction } from '../hooks/useCreateAction.tsx';
-import { createEventApi } from '../api/event.ts';
 import { EVENT_CREATE_STEP_KEY, EVENT_CREATE_STORAGE_KEY } from '../constants/event.ts';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Input } from './Input.tsx';
+import { useDispatch, useSelector } from '../redux/hooks/useCustomRedux.tsx';
+import { createEvent, type EventState } from '../redux/slices/eventSlice.ts';
+import toast from 'react-hot-toast';
 
 const COST_CATEGORIES = ['식비', '교통비', '숙박비', '기타'];
 
@@ -23,6 +24,11 @@ export const EventCostAndSubmitStep = ({ setStep }: EventCostAndSubmitStepProps)
   const navigate = useNavigate();
   const { tripId } = useParams();
   const costs = watch('cost');
+  const dispatch = useDispatch();
+
+  const { isCreateEventLoading, createEventError } = useSelector(
+    (state: { event: EventState }) => state.event
+  );
 
   const addCost = () => {
     setValue(
@@ -56,19 +62,18 @@ export const EventCostAndSubmitStep = ({ setStep }: EventCostAndSubmitStepProps)
       })
     );
   };
-  const {
-    execute,
-    isLoading: isCreateEventLoading,
-    error: createEventError,
-  } = useCreateAction(createEventApi);
 
   const handleCreateEvent = async () => {
     const formData = getValues();
-    const { eventId } = await execute({ ...formData, tripId: Number(tripId) });
-
-    sessionStorage.removeItem(EVENT_CREATE_STEP_KEY);
-    sessionStorage.removeItem(EVENT_CREATE_STORAGE_KEY);
-    navigate(`/trips/${tripId}/events/${eventId}`);
+    const result = await dispatch(createEvent({ ...formData, tripId: Number(tripId) }));
+    if (createEvent.fulfilled.match(result)) {
+      sessionStorage.removeItem(EVENT_CREATE_STEP_KEY);
+      sessionStorage.removeItem(EVENT_CREATE_STORAGE_KEY);
+      toast.success('이벤트 생성에 성공했습니다.');
+      navigate(`/trips/${tripId}/events/${result.payload.eventId}`);
+    } else {
+      toast.error('이벤트 생성에 실패했습니다.');
+    }
   };
 
   return (
@@ -145,9 +150,7 @@ export const EventCostAndSubmitStep = ({ setStep }: EventCostAndSubmitStepProps)
         <Plus size={16} /> 경비 추가
       </Button>
       <div className="mx-4 mt-1 min-h-[20px]">
-        {createEventError && (
-          <p className="text-sm text-red-500 pl-1">{createEventError.message}</p>
-        )}
+        {createEventError && <p className="text-sm text-red-500 pl-1">{createEventError}</p>}
       </div>
       <div className="flex-1" />
 

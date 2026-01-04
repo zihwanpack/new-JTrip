@@ -59,7 +59,6 @@ export const EventCreateTitleLocationStep = ({ setStep }: EventCreateTitleLocati
             AutocompleteSessionToken: typeof google.maps.places.AutocompleteSessionToken;
           };
 
-        // 변경 3: 토큰이 없으면 새로 생성 (Ref에 저장하여 인스턴스 유지)
         if (!sessionTokenRef.current) {
           sessionTokenRef.current = new AutocompleteSessionToken();
         }
@@ -129,6 +128,7 @@ export const EventCreateTitleLocationStep = ({ setStep }: EventCreateTitleLocati
           placeholder="예) 식당 예약"
           {...register('eventName')}
           className="w-full"
+          containerClassName="w-full"
         />
       </div>
       <div className="mx-4 mt-1 min-h-[20px]">
