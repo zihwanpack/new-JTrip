@@ -1,6 +1,7 @@
 import { Modal } from './Modal';
 import { Button } from './Button';
 import { AlertCircle, CheckCircle2 } from 'lucide-react';
+import clsx from 'clsx';
 
 interface ConfirmModalProps {
   open: boolean;
@@ -27,9 +28,10 @@ export const ConfirmModal = ({
     <Modal open={open} onClose={onClose} closeOnBackdrop={false}>
       <div className="flex flex-col items-center text-center p-4">
         <div
-          className={`mb-4 flex h-12 w-12 items-center justify-center rounded-full ${
+          className={clsx(
+            'mb-4 flex h-12 w-12 items-center justify-center rounded-full',
             danger ? 'bg-red-100 text-red-600' : 'bg-blue-100 text-primary-base'
-          }`}
+          )}
         >
           {danger ? <AlertCircle className="h-6 w-6" /> : <CheckCircle2 className="h-6 w-6" />}
         </div>
@@ -44,16 +46,17 @@ export const ConfirmModal = ({
         <div className="mt-6 flex w-full gap-3">
           <Button
             variant="secondary"
-            className="flex-1 py-3 text-gray-700 bg-gray-100 hover:bg-gray-200 border-none"
+            className="flex-1 py-3 text-gray-700 bg-gray-100 hover:bg-gray-200 border-none rounded-lg"
             onClick={onClose}
           >
             {cancelText}
           </Button>
 
           <Button
-            className={`flex-1 py-3 ${
-              danger ? 'bg-red-600 text-white hover:bg-red-700 border-transparent' : ''
-            }`}
+            className={clsx(
+              'flex-1 py-3 rounded-lg',
+              danger && 'bg-red-600 text-white hover:bg-red-700 border-transparent'
+            )}
             onClick={() => {
               onConfirm();
               onClose();

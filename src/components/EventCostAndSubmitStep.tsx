@@ -11,6 +11,7 @@ import { Input } from './Input.tsx';
 import { useDispatch, useSelector } from '../redux/hooks/useCustomRedux.tsx';
 import { createEvent, type EventState } from '../redux/slices/eventSlice.ts';
 import toast from 'react-hot-toast';
+import clsx from 'clsx';
 
 const COST_CATEGORIES = ['식비', '교통비', '숙박비', '기타'];
 
@@ -89,11 +90,10 @@ export const EventCostAndSubmitStep = ({ setStep }: EventCostAndSubmitStepProps)
               <Button
                 type="button"
                 onClick={() => setOpenIndex(openIndex === item.id ? null : item.id)}
-                className={`
-          flex items-center justify-between gap-2
-          border-2 rounded-xl p-3 w-full text-sm
-          ${item.category ? 'border-primary-base text-black' : 'border-gray-200 text-gray-400'}
-        `}
+                className={clsx(
+                  'flex items-center justify-between gap-2 border-2 rounded-xl p-3 w-full text-sm',
+                  item.category ? 'border-primary-base text-black' : 'border-gray-200 text-gray-400'
+                )}
               >
                 <span>{item.category || '항목 선택'}</span>
                 <ChevronDownIcon className="size-4" />

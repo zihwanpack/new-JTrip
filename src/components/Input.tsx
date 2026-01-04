@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { forwardRef } from 'react';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -12,7 +13,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         {label && <label className="mb-1 block text-sm font-medium text-gray-600">{label}</label>}
         <input
           ref={ref}
-          className={`w-full outline-none text-slate-700 placeholder:text-gray-300 ${className}`}
+          className={clsx(
+            'w-full outline-none text-slate-700 placeholder:text-gray-300',
+            className
+          )}
           {...props}
         />
       </div>

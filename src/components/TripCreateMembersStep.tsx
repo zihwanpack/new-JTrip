@@ -11,6 +11,7 @@ import { Input } from './Input.tsx';
 
 import { clearSearchedUsers, getSearchUsers, type UserState } from '../redux/slices/userSlice.ts';
 import { useDispatch, useSelector } from '../redux/hooks/useCustomRedux.tsx';
+import clsx from 'clsx';
 
 interface TripCreateMembersStepProps {
   setStep: (step: number) => void;
@@ -84,9 +85,12 @@ export const TripCreateMembersStep = ({ setStep }: TripCreateMembersStepProps) =
                   type="button"
                   onClick={() => !isAdded && addMember(user)}
                   disabled={isAdded}
-                  className={`w-full text-left px-4 py-3 flex items-center justify-between transition-colors
-                    ${isAdded ? 'bg-gray-50 cursor-default opacity-60' : 'hover:bg-primary-50 cursor-pointer'}
-                  `}
+                  className={clsx(
+                    'w-full text-left px-4 py-3 flex items-center justify-between transition-colors',
+                    isAdded
+                      ? 'bg-gray-50 cursor-default opacity-60'
+                      : 'hover:bg-primary-50 cursor-pointer'
+                  )}
                 >
                   <div className="flex flex-col">
                     <span className="font-medium text-slate-800">{user.nickname}</span>

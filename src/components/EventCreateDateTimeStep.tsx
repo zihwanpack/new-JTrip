@@ -10,6 +10,7 @@ import { Button } from './Button.tsx';
 import type { EventFormValues } from '../schemas/eventSchema.ts';
 import { useDispatch, useSelector } from '../redux/hooks/useCustomRedux.tsx';
 import { fetchTripDetail, type TripState } from '../redux/slices/tripSlice.ts';
+import clsx from 'clsx';
 
 interface EventCreateDateTimeStepProps {
   setStep: (step: number) => void;
@@ -189,9 +190,10 @@ export const ScrollWheel = ({
       {items.map((item) => (
         <li
           key={item}
-          className={`h-[40px] snap-center flex items-center justify-center ${
+          className={clsx(
+            'h-[40px] snap-center flex items-center justify-center',
             item === value ? 'font-bold' : 'text-gray-400'
-          }`}
+          )}
         >
           {item}
         </li>
