@@ -30,30 +30,30 @@ import { clearUsersByEmails, getUsersByEmails, type UserState } from '../redux/s
 import toast from 'react-hot-toast';
 import clsx from 'clsx';
 
-type EventViewState = 'loading' | 'error' | 'empty' | 'list' | 'map';
+type EventViewStatus = 'loading' | 'error' | 'empty' | 'success' | 'map';
 
-type MemberViewState = 'loading' | 'error' | 'list';
+type MemberViewStatus = 'loading' | 'error' | 'success';
 
-const getEventViewState = (
+const getEventViewStatus = (
   isMapViewOpen: boolean,
   isAllEventsLoading: boolean,
   allEventsError: boolean,
   filteredEvents: Event[]
-): EventViewState => {
+): EventViewStatus => {
   if (isMapViewOpen) return 'map';
   if (isAllEventsLoading) return 'loading';
   if (allEventsError) return 'error';
   if (filteredEvents.length === 0) return 'empty';
-  return 'list';
+  return 'success';
 };
 
-const getMemberViewState = (
+const getMemberViewStatus = (
   isUsersByEmailsLoading: boolean,
   usersByEmailsError: boolean
-): MemberViewState => {
+): MemberViewStatus => {
   if (isUsersByEmailsLoading) return 'loading';
   if (usersByEmailsError) return 'error';
-  return 'list';
+  return 'success';
 };
 
 export const TripDetailPage = () => {
@@ -124,14 +124,14 @@ export const TripDetailPage = () => {
     }
   };
 
-  const eventViewState = getEventViewState(
+  const eventViewState = getEventViewStatus(
     isMapViewOpen,
     isAllEventsLoading,
     Boolean(allEventsError),
     filteredEvents
   );
 
-  const memberViewState = getMemberViewState(isUsersByEmailsLoading, Boolean(usersByEmailsError));
+  const memberViewState = getMemberViewStatus(isUsersByEmailsLoading, Boolean(usersByEmailsError));
 
   return (
     <div className="flex flex-col h-dvh overflow-hidden relative">
@@ -186,7 +186,7 @@ export const TripDetailPage = () => {
                   <div className="text-xs h-8 text-red-400">멤버 정보를 불러올 수 없습니다</div>
                 );
 
-              case 'list':
+              case 'success':
                 return (
                   <div className="relative h-8 right-5" style={{ width: `${containerWidth}px` }}>
                     {visibleUsers.map((user, index) => (
@@ -273,7 +273,7 @@ export const TripDetailPage = () => {
                 </div>
               );
 
-            case 'list':
+            case 'success':
               return (
                 <div className="flex flex-col gap-3">
                   {filteredEvents.map((event, index) => (
