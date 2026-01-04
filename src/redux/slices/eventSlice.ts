@@ -1,6 +1,11 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { getEventDetailApi, getMyAllEventsApi } from '../../api/event.ts';
-import type { Event } from '../../types/event.ts';
+import {
+  createEventApi,
+  deleteEventApi,
+  getEventDetailApi,
+  getMyAllEventsApi,
+} from '../../api/event.ts';
+import type { CreateEventRequest, Event } from '../../types/event.ts';
 
 export const fetchAllEvents = createAsyncThunk<
   Event[],
@@ -25,26 +30,60 @@ export const fetchEventDetail = createAsyncThunk<Event, { id: number }, { reject
   }
 );
 
+export const deleteEvent = createAsyncThunk<null, { id: number }, { rejectValue: string }>(
+  'events/deleteEvent',
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      await deleteEventApi({ id });
+      return null;
+    } catch (error) {
+      return rejectWithValue(String(error));
+    }
+  }
+);
+
+export const createEvent = createAsyncThunk<Event, CreateEventRequest, { rejectValue: string }>(
+  'events/createEvent',
+  async (event, { rejectWithValue }) => {
+    try {
+      return await createEventApi(event);
+    } catch (error) {
+      return rejectWithValue(String(error));
+    }
+  }
+);
 export interface EventState {
   eventDetail: Event | null;
   allEvents: Event[];
+  deleteEvent: Event | null;
+  createEvent: Event | null;
 
   isAllEventsLoading: boolean;
   isEventDetailLoading: boolean;
+  isDeleteEventLoading: boolean;
+  isCreateEventLoading: boolean;
 
   allEventsError: string | null;
   eventDetailError: string | null;
+  deleteEventError: string | null;
+  createEventError: string | null;
 }
 
 const initialState: EventState = {
   eventDetail: null,
   allEvents: [],
+  deleteEvent: null,
+  createEvent: null,
 
   isAllEventsLoading: false,
   isEventDetailLoading: false,
+  isDeleteEventLoading: false,
+  isCreateEventLoading: false,
 
   allEventsError: null,
   eventDetailError: null,
+  deleteEventError: null,
+  createEventError: null,
 };
 
 export const eventSlice = createSlice({
@@ -83,8 +122,29 @@ export const eventSlice = createSlice({
     builder.addCase(fetchEventDetail.pending, (state) => {
       state.isEventDetailLoading = true;
     });
+    // 이벤트 삭제
+    builder.addCase(deleteEvent.fulfilled, (state, action) => {
+      state.deleteEvent = action.payload;
+      state.isDeleteEventLoading = false;
+    });
+    builder.addCase(deleteEvent.rejected, (state, action) => {
+      state.isDeleteEventLoading = false;
+      state.deleteEventError = action.payload ?? null;
+    });
+    // 이벤트 생성
+    builder.addCase(createEvent.fulfilled, (state, action) => {
+      state.createEvent = action.payload;
+      state.isCreateEventLoading = false;
+    });
+    builder.addCase(createEvent.rejected, (state, action) => {
+      state.isCreateEventLoading = false;
+      state.createEventError = action.payload ?? null;
+    });
+    builder.addCase(createEvent.pending, (state) => {
+      state.isCreateEventLoading = true;
+    });
   },
 });
 
-export const { resetEventState } = eventSlice.actions;
+export const { clearEventDetail, resetEventState } = eventSlice.actions;
 export default eventSlice.reducer;
