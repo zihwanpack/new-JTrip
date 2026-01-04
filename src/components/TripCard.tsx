@@ -1,5 +1,6 @@
 import { CirclePlus } from 'lucide-react';
 import { Card } from './Card';
+import clsx from 'clsx';
 
 interface BaseTripCardProps {
   size?: 'small' | 'large' | 'largest' | 'myTrips';
@@ -62,11 +63,11 @@ export const TripCard = ({
     return (
       <Card
         onClick={onClick}
-        className={[
+        className={clsx(
           'flex flex-col items-center justify-center gap-4',
           'border-dashed border-2 border-gray-300 hover:bg-gray-50 transition-colors',
-          cardStyles.container,
-        ].join(' ')}
+          cardStyles.container
+        )}
       >
         <p className="text-center text-gray-600 font-medium text-sm">
           새로운 여행을 <br />
@@ -81,12 +82,12 @@ export const TripCard = ({
     return (
       <Card
         onClick={onClick}
-        className={[
+        className={clsx(
           'flex items-center gap-4',
           'bg-white border border-gray-200 shadow-sm',
           'rounded-2xl px-4',
-          cardStyles.container,
-        ].join(' ')}
+          cardStyles.container
+        )}
       >
         <div className="size-20 rounded-xl overflow-hidden bg-gray-200 shrink-0">
           <img
@@ -97,7 +98,7 @@ export const TripCard = ({
         </div>
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2 min-w-0">
-            <p className={`${cardStyles.title} font-semibold text-gray-900`}>{title}</p>
+            <p className={clsx(cardStyles.title, 'font-semibold text-gray-900')}>{title}</p>
             {badgeText && (
               <span className="shrink-0 px-2 py-0.5 rounded-full text-[12px] font-semibold bg-emerald-50 text-emerald-600">
                 {badgeText}
@@ -105,14 +106,14 @@ export const TripCard = ({
             )}
           </div>
 
-          <p className={`${cardStyles.date} text-gray-500 mt-1 truncate`}>{date}</p>
+          <p className={clsx(cardStyles.date, 'text-gray-500 mt-1 truncate')}>{date}</p>
         </div>
       </Card>
     );
   }
 
   return (
-    <Card onClick={onClick} className={`relative   ${cardStyles.container}`}>
+    <Card onClick={onClick} className={clsx('relative', cardStyles.container)}>
       <img
         src={tripImage}
         alt={`${title} 여행 이미지`}
@@ -120,8 +121,8 @@ export const TripCard = ({
       />
       <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
       <div className="absolute bottom-3 left-4 text-white z-10">
-        <p className={`${cardStyles.title} font-semibold truncate pr-2`}>{title}</p>
-        <p className={`${cardStyles.date} opacity-90`}>{date}</p>
+        <p className={clsx(cardStyles.title, 'font-semibold truncate pr-2')}>{title}</p>
+        <p className={clsx(cardStyles.date, 'opacity-90')}>{date}</p>
       </div>
     </Card>
   );

@@ -1,3 +1,5 @@
+import clsx from 'clsx';
+
 interface SkeletonProps {
   width: string;
   height: string;
@@ -7,7 +9,7 @@ interface SkeletonProps {
 export const Skeleton = ({ width, height, className }: SkeletonProps) => {
   return (
     <div
-      className={`animate-pulse bg-gray-200 rounded-md ${className}`}
+      className={clsx('animate-pulse bg-gray-200 rounded-md', className)}
       style={{ width, height }}
     ></div>
   );
