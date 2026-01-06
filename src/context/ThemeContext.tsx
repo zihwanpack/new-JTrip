@@ -1,4 +1,5 @@
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useEffect } from 'react';
+import { useStorage } from '../hooks/useStorage.tsx';
 
 type Theme = 'dark' | 'light' | 'system';
 
@@ -26,9 +27,11 @@ function ThemeProvider({
   storageKey = 'theme-storage-key',
   ...props
 }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(
-    () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
-  );
+  const { value: theme, setValue: setTheme } = useStorage<Theme>({
+    key: storageKey,
+    initialValue: defaultTheme,
+    type: 'local',
+  });
 
   useEffect(() => {
     const root = window.document.documentElement;
