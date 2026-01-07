@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { tripSchema, type TripFormValues } from '../schemas/tripSchema.ts';
 import { useStorage } from '../hooks/useStorage.tsx';
 
-import { useAuth } from '../hooks/useAuth.tsx';
+import { useAuthStatus } from '../hooks/useAuthStatus.tsx';
 import { TRIP_CREATE_STEP_KEY, TRIP_CREATE_STORAGE_KEY } from '../constants/trip.ts';
 import { TripFormTemplate } from '../components/TripFormTemplate.tsx';
 
@@ -18,7 +18,7 @@ export const TripCreatePage = () => {
   } = useStorage<number>({ key: TRIP_CREATE_STEP_KEY, initialValue: 1, type: 'session' });
 
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user } = useAuthStatus();
 
   const initialValues = sessionStorage.getItem(TRIP_CREATE_STORAGE_KEY);
   const defaultValues = initialValues
