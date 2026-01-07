@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 
-import { useAuth } from '../hooks/useAuth.tsx';
+import { useAuthStatus } from '../hooks/useAuthStatus.tsx';
 import { TripCard } from '../components/TripCard.tsx';
 import { TRIP_IMAGE_PATHS } from '../constants/tripImages.ts';
 import { formatDateRange } from '../utils/date.ts';
@@ -12,7 +12,7 @@ import { fetchAllMyTrips, type TripState } from '../redux/slices/tripSlice.ts';
 import { useEffect } from 'react';
 
 export const HomePage = () => {
-  const { user } = useAuth();
+  const { user } = useAuthStatus();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 

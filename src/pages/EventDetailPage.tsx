@@ -3,8 +3,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Calendar, Clock, DollarSign, MapPin, Pencil, Trash } from 'lucide-react';
 
 import { Header } from '../layouts/Header.tsx';
-import { Button } from '../components/Button.tsx';
 import { FullscreenLoader } from '../components/FullscreenLoader.tsx';
+import { CTA } from '../components/CTA.tsx';
 
 import { useDispatch, useSelector } from '../redux/hooks/useCustomRedux.tsx';
 import {
@@ -17,6 +17,7 @@ import {
 import { formatDate } from '../utils/date.ts';
 import { getTotal } from '../utils/getTotal.ts';
 import toast from 'react-hot-toast';
+import { Typography } from '../components/Typography.tsx';
 
 export const EventDetailPage = () => {
   const { eventId, tripId } = useParams();
@@ -65,13 +66,14 @@ export const EventDetailPage = () => {
   const totalCost = getTotal(eventDetail.cost.map((c) => c.value) || []);
 
   return (
-    <div className="flex flex-col h-dvh bg-gray-50 dark:bg-slate-950 relative text-gray-900 dark:text-gray-100">
-      <Header title="일정 상세" onClose={() => navigate(`/trips/${tripId}`)} />
+    <div className="flex flex-col h-dvh bg-gray-50 dark:bg-slate-900 relative">
+      <Header title="이벤트 상세" onClose={() => navigate(`/trips/${tripId}`)} />
+
       <section className="flex-1 overflow-y-auto scrollbar-hide px-5 pt-4 pb-28 space-y-4">
         <div className="bg-white dark:bg-slate-900 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm p-5">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4 leading-tight">
+          <Typography variant="h1" color="secondary" className="mb-4 leading-tight">
             {eventDetail.eventName}
-          </h1>
+          </Typography>
 
           <div className="bg-gray-50 dark:bg-slate-800 rounded-xl p-4 space-y-3">
             <div className="flex items-center gap-3">
@@ -120,10 +122,11 @@ export const EventDetailPage = () => {
                 예상 비용
               </span>
             </div>
-            <p className="text-2xl font-bold text-gray-900 dark:text-gray-100 mt-1">
-              {totalCost.toLocaleString()}{' '}
-              <span className="text-base font-medium text-gray-500 dark:text-gray-400">원</span>
-            </p>
+
+            <Typography variant="h1" color="secondary" className="mt-1">
+              {totalCost.toLocaleString()}
+              <span className="text-base font-medium text-gray-500">원</span>
+            </Typography>
           </div>
 
           {eventDetail.cost.length > 0 ? (
@@ -147,25 +150,22 @@ export const EventDetailPage = () => {
         </div>
       </section>
 
-      <div className="absolute bottom-0 left-0 right-0 p-4 pb-8 bg-white/90 dark:bg-slate-950/95 backdrop-blur-md border-t border-gray-100 dark:border-gray-800 flex gap-3 z-10">
-        <Button
-          className="flex-1 h-12 bg-primary-base/90 border border-gray-200 dark:border-primary-base/50 text-white hover:bg-primary-dark rounded-xl shadow-sm flex items-center justify-center gap-2 transition-colors"
-          onClick={() => navigate(`/trips/${tripId}/events/${eventId}/edit`)}
-        >
-          <Pencil className="size-4" />
-          <span onClick={editEventHandler} className="font-semibold">
-            수정하기
-          </span>
-        </Button>
-
-        <Button
-          className="flex-1 h-12 bg-red-500 hover:bg-red-600 text-white rounded-xl shadow-sm border border-red-100 dark:border-red-500/40 flex items-center justify-center gap-2 transition-colors"
-          onClick={deleteEventHandler}
-        >
-          <Trash className="size-4" />
-          <span className="font-semibold">삭제하기</span>
-        </Button>
-      </div>
+      <CTA
+        customButtons={[
+          {
+            text: '수정하기',
+            onClick: editEventHandler,
+            variant: 'primary',
+            icon: <Pencil className="size-4" />,
+          },
+          {
+            text: '삭제하기',
+            onClick: deleteEventHandler,
+            variant: 'danger',
+            icon: <Trash className="size-4" />,
+          },
+        ]}
+      />
     </div>
   );
 };

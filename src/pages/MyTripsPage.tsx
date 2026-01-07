@@ -9,7 +9,7 @@ import {
   getMyUpcomingTripsCursorApi,
   getMyOnGoingTripApi,
 } from '../api/trip.ts';
-import { useAuth } from '../hooks/useAuth.tsx';
+import { useAuthStatus } from '../hooks/useAuthStatus.tsx';
 import { TripCard } from '../components/TripCard.tsx';
 import { TRIP_IMAGE_PATHS } from '../constants/tripImages.ts';
 import { useNavigate } from 'react-router-dom';
@@ -18,12 +18,13 @@ import { Skeleton } from '../components/Skeleton.tsx';
 import { Button } from '../components/Button.tsx';
 import { ArrowUpIcon } from 'lucide-react';
 import clsx from 'clsx';
+import { Typography } from '../components/Typography.tsx';
 
 type TripTabStatus = 'upcoming' | 'ongoing' | 'completed';
 
 export const MyTripsPage = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user } = useAuthStatus();
   const [tabStatus, setTabStatus] = useState<TripTabStatus>('upcoming');
   const [trips, setTrips] = useImmer<Trip[]>([]);
 
@@ -196,9 +197,11 @@ export const MyTripsPage = () => {
           </>
         )}
         {!isLoading && trips.length === 0 && !error && (
-          <div className="flex flex-col items-center justify-center h-full text-gray-400 dark:text-gray-500 mt-20">
+          <div className="flex flex-col items-center justify-center h-full mt-20">
             <span className="text-4xl mb-2">✈️</span>
-            <p>{tabUI.emptyText}</p>
+            <Typography variant="helper" color="muted">
+              {tabUI.emptyText}
+            </Typography>
             {tabUI.showButton && (
               <Button onClick={() => navigate('/trips/new')} className="mt-4 text-primary-base">
                 여행 계획하기
@@ -211,7 +214,13 @@ export const MyTripsPage = () => {
         )}
       </div>
 
-      {error && <div className="text-center text-red-500 py-4">{error}</div>}
+      {error && (
+        <div className="text-center py-4">
+          <Typography variant="helper" color="error">
+            {error}
+          </Typography>
+        </div>
+      )}
       {showTopBtn && (
         <Button
           onClick={handleScrollToTop}

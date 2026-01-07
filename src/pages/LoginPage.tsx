@@ -7,14 +7,15 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 
-import { useAuth } from '../hooks/useAuth.tsx';
+import { useAuthStatus } from '../hooks/useAuthStatus.tsx';
 import { Button } from '../components/Button.tsx';
 import type { Provider } from '../types/user.ts';
+import { Typography } from '../components/Typography.tsx';
 
 const WORDS = ['누구나', 'J처럼', '여행하기'];
 
 export const LoginPage = () => {
-  const { user, loading } = useAuth();
+  const { user, loading } = useAuthStatus();
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
@@ -43,7 +44,9 @@ export const LoginPage = () => {
 
       <div className="relative z-10 flex flex-col min-h-dvh">
         <section className="flex-1 flex items-center justify-center">
-          <h1 className="text-4xl font-bold text-white animate-fade">{WORDS[index]}</h1>
+          <Typography variant="h1" color="secondary" className="animate-fade">
+            {WORDS[index]}
+          </Typography>
         </section>
         <div className="flex-[2]" />
         <div className="flex-1 flex flex-col items-center justify-center gap-4">
