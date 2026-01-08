@@ -15,18 +15,9 @@ export const requestHandler = async <T>({
   try {
     const { data } = await request();
     if (schema) {
-      try {
-        return schema.parse(data.result);
-      } catch (zodError) {
-        if (zodError instanceof z.ZodError) {
-          console.error('Zod error:', zodError);
-          const errorMessages = zodError.issues.map((issue) => {
-            const path = issue.path.length > 0 ? issue.path.join('.') : 'root';
-            return `${path}: ${issue.message}`;
-          });
-          throw new ErrorClass(`Schema validation failed: ${errorMessages.join(', ')}`, 500);
-        }
-        throw zodError;
+      const { success, error } = schema.safeParse(data.result);
+      if (!success) {
+        throw new ErrorClass(`Schema validation failed: ${error.message}`, 500);
       }
     }
     return data.result;
