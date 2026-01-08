@@ -16,7 +16,7 @@ export const getUserApi = async (): Promise<User> => {
 
 export const logoutApi = async (): Promise<null> => {
   return requestHandler({
-    request: () => unauthenticatedClient.post<LogoutResponse>('/auth/logout'),
+    request: () => unauthenticatedClient.post<LogoutResponse>('/users/logout'),
     ErrorClass: AuthError,
   });
 };
