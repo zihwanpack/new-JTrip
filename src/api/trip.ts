@@ -31,17 +31,17 @@ export const createTripApi = async (body: CreateTripRequest): Promise<Trip> => {
   });
 };
 
-export const getTripDetailApi = async ({ tripId }: GetTripDetailParam): Promise<Trip> => {
+export const getTripDetailApi = async ({ id }: GetTripDetailParam): Promise<Trip> => {
   return requestHandler({
-    request: () => authenticatedClient.get<GetTripDetailResponse>(`/trips/${tripId}`),
+    request: () => authenticatedClient.get<GetTripDetailResponse>(`/trips/${id}`),
     ErrorClass: TripError,
     schema: tripSchema,
   });
 };
 
-export const deleteTripApi = async ({ tripId }: DeleteTripParam): Promise<null> => {
+export const deleteTripApi = async ({ id }: DeleteTripParam): Promise<null> => {
   return requestHandler({
-    request: () => authenticatedClient.delete<DeleteTripResponse>(`/trips/${tripId}`),
+    request: () => authenticatedClient.delete<DeleteTripResponse>(`/trips/${id}`),
     ErrorClass: TripError,
   });
 };
@@ -113,9 +113,9 @@ export const getMyUpcomingTripsCursorApi = async ({
   });
 };
 
-export const updateTripApi = async ({ tripId, body }: UpdateTripParam): Promise<Trip> => {
+export const updateTripApi = async ({ id, body }: UpdateTripParam): Promise<Trip> => {
   return requestHandler({
-    request: () => authenticatedClient.patch<UpdateTripResponse>(`/trips/${tripId}`, body),
+    request: () => authenticatedClient.patch<UpdateTripResponse>(`/trips/${id}`, body),
     ErrorClass: TripError,
     schema: tripSchema,
   });

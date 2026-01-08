@@ -30,7 +30,7 @@ export type GetTripDetailResponse = TripResponse;
 export type DeleteTripResponse = SuccessResponse<null>;
 
 export type GetTripDetailParam = {
-  tripId: number;
+  id: number;
 };
 
 export type DeleteTripParam = GetTripDetailParam;
