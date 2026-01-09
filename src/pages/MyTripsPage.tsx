@@ -9,7 +9,7 @@ import {
   getMyUpcomingTripsCursorApi,
   getMyOnGoingTripApi,
 } from '../api/trip.ts';
-import { useAuthStatus } from '../hooks/useAuthStatus.tsx';
+import { useAuthStatus } from '../hooks/auth/useAuthStatus.tsx';
 import { TripCard } from '../components/trip/TripCard.tsx';
 import { TRIP_IMAGE_PATHS } from '../constants/tripImages.ts';
 import { useNavigate } from 'react-router-dom';

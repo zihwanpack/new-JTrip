@@ -3,7 +3,7 @@ import { useFormContext } from 'react-hook-form';
 import type { TripFormValues } from '../../schemas/tripSchema.ts';
 import { useMemo, useState, type ChangeEvent } from 'react';
 import type { UserSummary } from '../../types/user.ts';
-import { useDebounce } from '../../hooks/useDebounce.tsx';
+import { useDebounce } from '../../hooks/common/useDebounce.tsx';
 import { Button } from '../common/Button.tsx';
 import { CTA } from '../common/CTA.tsx';
 import { Input } from '../common/Input.tsx';

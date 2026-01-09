@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useDebounce } from '../../hooks/useDebounce.tsx';
+import { useDebounce } from '../../hooks/common/useDebounce.tsx';
 import { Loader2 } from 'lucide-react';
 import { useFormContext } from 'react-hook-form';
 import type { EventFormValues } from '../../schemas/eventSchema.ts';

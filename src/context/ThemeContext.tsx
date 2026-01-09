@@ -1,5 +1,5 @@
 import { createContext, useEffect } from 'react';
-import { useStorage } from '../hooks/useStorage.tsx';
+import { useStorage } from '../hooks/common/useStorage.tsx';
 
 type Theme = 'dark' | 'light' | 'system';
 

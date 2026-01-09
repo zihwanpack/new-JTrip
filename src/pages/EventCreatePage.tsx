@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
-import { useStorage } from '../hooks/useStorage.tsx';
+import { useStorage } from '../hooks/common/useStorage.tsx';
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';

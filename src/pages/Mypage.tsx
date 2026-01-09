@@ -1,6 +1,6 @@
 import { Header } from '../layouts/Header.tsx';
 import { Footer } from '../layouts/Footer.tsx';
-import { useAuthStatus } from '../hooks/useAuthStatus.tsx';
+import { useAuthStatus } from '../hooks/auth/useAuthStatus.tsx';
 import { Moon, SquareArrowOutUpRight, UserRound, Sun, Monitor, ArrowRight } from 'lucide-react';
 import stamp1Image from '@/assets/mypage/stamp1.webp';
 import stamp2Image from '@/assets/mypage/stamp2.webp';
@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import { withdrawApi } from '../api/user.ts';
 import { useState } from 'react';
 import { Modal } from '../components/common/Modal.tsx';
-import { useTheme } from '../hooks/useTheme.tsx';
+import { useTheme } from '../hooks/common/useTheme.tsx';
 import { useQueryClient } from '@tanstack/react-query';
 
 export const Mypage = () => {
