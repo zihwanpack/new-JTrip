@@ -3,6 +3,7 @@ import type { Event } from '../types/event.ts';
 import { geocodeAddress } from '../utils/map.ts';
 import { useThrottle } from '../hooks/useThrottle.tsx';
 import { env } from '../schemas/envSchema.ts';
+import { loadGoogleMaps } from '../utils/loadGoogleMaps.ts';
 
 interface GoogleMapViewProps {
   events: Event[];
@@ -100,26 +101,4 @@ export const GoogleMapView = ({ events }: GoogleMapViewProps) => {
       <div ref={mapRef} style={{ width: '500px', height: '60vh' }} />
     </div>
   );
-};
-
-let googleMapsPromise: Promise<void> | null = null;
-
-const loadGoogleMaps = () => {
-  if (googleMapsPromise) return googleMapsPromise;
-
-  googleMapsPromise = new Promise((resolve) => {
-    if (window.google?.maps) {
-      resolve();
-      return;
-    }
-
-    const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${env.VITE_GOOGLE_MAPS_API_KEY}&language=ko`;
-    script.async = true;
-    script.defer = true;
-    script.onload = () => resolve();
-    document.head.appendChild(script);
-  });
-
-  return googleMapsPromise;
 };
