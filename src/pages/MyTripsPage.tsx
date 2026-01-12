@@ -24,11 +24,30 @@ import { useMyTripsQueryOptions, useOngoingTripQueryOptions } from '../hooks/que
 
 export type TripTabStatus = 'upcoming' | 'ongoing' | 'completed';
 
+const LIMIT = 10;
+
+const TRIP_TAB_UI = {
+  upcoming: {
+    emptyText: '예정된 여행이 없습니다.',
+    getBadge: (start: string) => `D-${calculateDday(start)}`,
+    showButton: true,
+  },
+  ongoing: {
+    emptyText: '현재 진행 중인 여행이 없습니다.',
+    getBadge: () => '진행중',
+    showButton: false,
+  },
+  completed: {
+    emptyText: '다녀온 여행이 없습니다.',
+    getBadge: (_start: string, end?: string) => `D+${Math.abs(calculateDday(end ?? ''))}`,
+    showButton: false,
+  },
+} as const;
+
 export const MyTripsPage = () => {
   const navigate = useNavigate();
   const { user } = useAuthStatus();
   const [tabStatus, setTabStatus] = useState<TripTabStatus>('upcoming');
-  const LIMIT = 10;
 
   const {
     data: tripsData,
@@ -111,24 +130,6 @@ export const MyTripsPage = () => {
 
     return () => observer.disconnect();
   }, [fetchNextPage, hasNextPage, tabStatus]);
-
-  const TRIP_TAB_UI = {
-    upcoming: {
-      emptyText: '예정된 여행이 없습니다.',
-      getBadge: (start: string) => `D-${calculateDday(start)}`,
-      showButton: true,
-    },
-    ongoing: {
-      emptyText: '현재 진행 중인 여행이 없습니다.',
-      getBadge: () => '진행중',
-      showButton: false,
-    },
-    completed: {
-      emptyText: '다녀온 여행이 없습니다.',
-      getBadge: (_start: string, end?: string) => `D+${Math.abs(calculateDday(end ?? ''))}`,
-      showButton: false,
-    },
-  } as const;
 
   const tabUI = TRIP_TAB_UI[tabStatus];
 

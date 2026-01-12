@@ -59,6 +59,8 @@ const getMemberViewStatus = (
   return 'success';
 };
 
+const OVERLAP = 18;
+
 export const TripDetailPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -115,8 +117,6 @@ export const TripDetailPage = () => {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const [isMapViewOpen, setIsMapViewOpen] = useState<boolean>(false);
-
-  const OVERLAP = 18;
 
   const visibleUsers = usersByEmails?.slice(0, 3) ?? [];
   const restUsers = Math.max(usersByEmails?.length ?? 0 - 3, 0);
