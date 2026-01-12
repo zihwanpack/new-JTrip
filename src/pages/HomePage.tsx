@@ -17,6 +17,8 @@ import {
   useUpcomingTripsQueryOptions,
 } from '../hooks/query/trip.ts';
 
+const DEFAULT_TRIP_IMAGE = TRIP_IMAGE_PATHS.beach;
+
 export const HomePage = () => {
   const { user } = useAuthStatus();
   const navigate = useNavigate();
@@ -64,7 +66,6 @@ export const HomePage = () => {
     upcomingTrip: upcomingTrips?.[0] ?? null,
   });
 
-  const DEFAULT_TRIP_IMAGE = TRIP_IMAGE_PATHS.beach;
   return (
     <div className="flex flex-col justify-between h-dvh overflow-hidden bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100">
       <div className="flex flex-col justify-between h-full mx-3">

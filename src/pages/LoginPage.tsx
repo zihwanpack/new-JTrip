@@ -7,11 +7,11 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 
-import { useAuthStatus } from '../hooks/user/useAuthStatus.tsx';
 import { Button } from '../components/common/Button.tsx';
 import type { Provider } from '../types/user.ts';
 import { Typography } from '../components/common/Typography.tsx';
 import { env } from '../schemas/common/envSchema.ts';
+import { useAuthStatus } from '../hooks/user/useAuthStatus.tsx';
 
 const WORDS = ['누구나', 'J처럼', '여행하기'];
 
