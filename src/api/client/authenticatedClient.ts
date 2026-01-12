@@ -1,5 +1,6 @@
-import axios, { type InternalAxiosRequestConfig } from 'axios';
+import axios, { AxiosError, type InternalAxiosRequestConfig } from 'axios';
 import { env } from '../../schemas/common/envSchema.ts';
+import { AuthError } from '../../errors/customErrors.ts';
 interface CustomInternalAxiosRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean;
 }
@@ -20,7 +21,10 @@ authenticatedClient.interceptors.response.use(
       if (window.location.pathname !== '/login') {
         window.location.href = '/login';
       }
-      return Promise.reject(error);
+      throw new AuthError(
+        error.response?.data?.message ?? '인증에 실패했습니다.',
+        error.response?.status ?? 401
+      );
     }
 
     if (error.response?.status === 401 && !original._retry) {
@@ -29,7 +33,12 @@ authenticatedClient.interceptors.response.use(
         await authenticatedClient.post('/auth/token');
         return authenticatedClient(original);
       } catch (err) {
-        return Promise.reject(err);
+        throw new AuthError(
+          err instanceof AxiosError
+            ? (err.response?.data?.message ?? '인증에 실패했습니다.')
+            : '인증에 실패했습니다.',
+          err instanceof AxiosError ? (err.response?.status ?? 401) : 401
+        );
       }
     }
 
