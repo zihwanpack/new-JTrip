@@ -30,8 +30,9 @@ export const usePastTripsQueryOptions = ({ userId }: { userId: string }) => {
   };
 };
 
-export const useMyTripsQueryOptions = () => {
+export const useMyTripsQueryOptions = ({ userId }: { userId: string }) => {
   return {
     ...tripStaleGcTime,
+    enabled: userId.trim().length > 0,
   };
 };
