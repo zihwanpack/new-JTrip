@@ -1,15 +1,16 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { Calendar, Clock, DollarSign, MapPin } from 'lucide-react';
 import { Header } from '../layouts/Header.tsx';
-import { FullscreenLoader } from '../components/common/FullscreenLoader.tsx';
 import { formatDate } from '../utils/common/date.ts';
 import { getTotal } from '../utils/common/getTotal.ts';
 import toast from 'react-hot-toast';
 import { Typography } from '../components/common/Typography.tsx';
 import { eventQueryKeys } from '../constants/queryKeys.ts';
 import { deleteEventApi, getEventDetailApi } from '../api/event.ts';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { Button } from '../components/common/Button.tsx';
+import { useEventDetailQueryOptions } from '../hooks/query/event.ts';
+import type { Event } from '../types/event.ts';
 
 export const EventDetailPage = () => {
   const { eventId, tripId } = useParams();
@@ -19,20 +20,13 @@ export const EventDetailPage = () => {
 
   const queryClient = useQueryClient();
 
-  const {
-    data: eventDetail,
-    isPending: isEventDetailPending,
-    isError: isEventDetailError,
-    error: eventDetailError,
-  } = useQuery({
+  const { data: eventDetail } = useSuspenseQuery<Event>({
     queryKey: eventQueryKeys.detail(eventIdNumber),
     queryFn: () => getEventDetailApi({ eventId: eventIdNumber }),
-    staleTime: 5 * 60 * 1000,
-    gcTime: 30 * 60 * 1000,
-    enabled: !!eventId,
+    ...useEventDetailQueryOptions({ eventId: eventIdNumber }),
   });
 
-  const deleteEventMutation = useMutation({
+  const deleteEventMutation = useMutation<null, Error>({
     mutationFn: () => deleteEventApi({ eventId: eventIdNumber }),
     onSuccess: () => {
       toast.success('이벤트 삭제에 성공했습니다.');
@@ -53,11 +47,6 @@ export const EventDetailPage = () => {
   const editEventHandler = () => {
     navigate(`/trips/${tripId}/events/${eventId}/edit`);
   };
-
-  if (isEventDetailPending) return <FullscreenLoader />;
-
-  if (isEventDetailError)
-    return <div className="text-xl font-semibold text-red-500">{eventDetailError?.message}</div>;
 
   const totalCost = getTotal(eventDetail.cost.map((c) => c.value) || []);
 
