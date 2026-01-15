@@ -1,9 +1,9 @@
-name: CI (pnpm)
+name: CI Check
 
 on:
-  pull_request:
   push:
     branches: ['main']
+  pull_request:
 
 jobs:
   ci:
@@ -29,7 +29,9 @@ jobs:
 
       - name: Lint
         run: pnpm lint
-        continue-on-error: false
 
-      - name: Build
+      - name: Type Check (TypeScript 쓴다면 추천)
+        run: pnpm tsc --noEmit
+
+      - name: Build Check
         run: pnpm build
