@@ -74,7 +74,7 @@ export const EventDateTimeStep = ({ setStep }: EventDateTimeStepProps) => {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex gap-2 items-center mt-4 mx-4 min-h-[70px]">
+      <div className="flex gap-2 items-center mx-4 min-h-[56px]">
         <Typography variant="h1">일정을 선택해주세요</Typography>
         <Typography variant="body" color="primary">
           필수
@@ -97,7 +97,7 @@ export const EventDateTimeStep = ({ setStep }: EventDateTimeStepProps) => {
         />
       </div>
 
-      <div className="flex gap-3 mx-4 mt-4">
+      <div className="flex gap-3 mx-4 mt-2">
         <Button
           onClick={() => startDate && setActiveDate('startDate')}
           disabled={!startDate}
@@ -132,7 +132,6 @@ export const EventDateTimeStep = ({ setStep }: EventDateTimeStepProps) => {
           onClose={() => setActiveDate(null)}
         />
       )}
-      <div className="flex-1" />
       <CTA
         isValid={isDateStepValid}
         setStep={setStep}
