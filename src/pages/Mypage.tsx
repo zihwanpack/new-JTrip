@@ -25,6 +25,8 @@ import { useQueryClient } from '@tanstack/react-query';
 import clsx from 'clsx';
 import { Typography } from '../components/common/Typography.tsx';
 
+const APP_URL = import.meta.env.VITE_APP_URL;
+
 export const Mypage = () => {
   const { user, logout, withdrawal } = useAuthStatus();
   const navigate = useNavigate();
@@ -34,12 +36,34 @@ export const Mypage = () => {
   const [isThemeDropdownOpen, setIsThemeDropdownOpen] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const copyToClipboard = async (text: string) => {
-    try {
-      await navigator.clipboard.writeText(text);
-      toast.success('복사 완료');
-    } catch {
-      toast.error('복사 실패');
+  const shareApp = async (url?: string) => {
+    if (!url) {
+      toast.error('공유할 링크가 없습니다');
+      return;
+    }
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'J-TRIP',
+          text: '여행 좋아하는 사람이라면 한 번 써봐 ✈️',
+          url,
+        });
+        return;
+      } catch (error) {
+        console.log('share canceled', error);
+      }
+    }
+
+    if (navigator.clipboard) {
+      try {
+        await navigator.clipboard.writeText(url);
+        toast.success('링크가 복사되었습니다');
+      } catch {
+        toast.error('복사 실패');
+      }
+    } else {
+      toast.error('공유를 지원하지 않는 환경입니다');
     }
   };
 
@@ -111,7 +135,7 @@ export const Mypage = () => {
         <div className="flex justify-center my-4">
           <Button
             size="lg"
-            onClick={() => copyToClipboard('https://j-trip.store')}
+            onClick={() => shareApp(APP_URL)}
             className="w-4/5 rounded-xl bg-gradient-to-r from-emerald-300 to-teal-300 text-white font-semibold flex items-center justify-between shadow-sm dark:shadow-slate-900/40 active:scale-[0.90] transition"
           >
             <span className="text-base">여행을 좋아하는 친구에게 공유하세요</span>
