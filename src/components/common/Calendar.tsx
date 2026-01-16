@@ -40,9 +40,11 @@ export const Calendar = ({ startDate, endDate, setValue, minDate, maxDate }: Cal
         month: 'flex flex-col',
         nav: 'absolute top-6 left-60 px-1',
         button_previous:
-          'p-1 text-gray-400 dark:text-gray-400 hover:text-black dark:hover:text-white',
-        button_next: 'p-1 text-gray-400 dark:text-gray-400 hover:text-black dark:hover:text-white',
-        chevron: 'size-5 cursor-pointer',
+          'group p-1 rounded-md hover:bg-gray-100 dark:hover:bg-slate-800 cursor-pointer',
+        button_next:
+          'group p-1 rounded-md hover:bg-gray-100 dark:hover:bg-slate-800 cursor-pointer',
+        chevron:
+          'size-5 stroke-slate-400 fill:black dark:fill-white group-hover:stroke-slate-900 dark:group-hover:stroke-white',
 
         weekdays: 'w-full flex justify-between items-center h-10 mb-2',
         weekday: 'w-10 text-center text-sm font-medium text-gray-500',
