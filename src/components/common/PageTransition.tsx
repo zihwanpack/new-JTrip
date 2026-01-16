@@ -9,11 +9,12 @@ interface PageTransitionProps {
 export const PageTransition = ({ children, key }: PageTransitionProps) => {
   return (
     <motion.div
+      className="h-full w-full overflow-y-auto overflow-x-hidden"
       key={key}
-      initial={{ opacity: 0, scale: 0.98 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.98 }}
-      transition={{ duration: 0.3 }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ duration: 0.3, ease: 'easeInOut' }}
     >
       {children}
     </motion.div>
