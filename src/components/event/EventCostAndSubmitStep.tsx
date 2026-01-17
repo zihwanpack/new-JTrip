@@ -252,8 +252,15 @@ export const EventCostAndSubmitStep = ({ setStep, mode }: EventCostAndSubmitStep
                 placeholder="0"
                 value={item.value ? String(item.value) : ''}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  updateCost(item.id, { value: Number(e.target.value) })
-                }
+                   {const inputValue = e.target.value;                  
+                    if (inputValue === '') {
+                    updateCost(item.id, { value: 0 });
+                    return;
+                  }
+                    if (/^\d+$/.test(inputValue)) {
+                    updateCost(item.id, { value: Number(inputValue) });
+                  }
+                }}
                 className="py-3 text-right"
               />
               <span className="ml-1 text-sm text-gray-500 dark:text-gray-400">원</span>
