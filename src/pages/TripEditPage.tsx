@@ -22,7 +22,7 @@ export const TripEditPage = () => {
     ...useTripDetailQueryOptions({ id: tripIdNumber }),
   });
 
-  const defaultValues = {
+  const defaultValues:TripFormValues = {
     destinationType: '',
     destination: '',
     startDate: '',
@@ -35,7 +35,7 @@ export const TripEditPage = () => {
   const form = useForm<TripFormValues>({
     resolver: zodResolver(tripFormSchema),
     mode: 'onChange',
-    defaultValues: defaultValues as TripFormValues,
+    defaultValues: defaultValues,
   });
 
   useEffect(() => {
