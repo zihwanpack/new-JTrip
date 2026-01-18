@@ -11,6 +11,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { tripQueryKeys } from '../../constants/queryKeys.ts';
 import { FullscreenLoader } from '../common/FullscreenLoader.tsx';
 import type { Trip } from '../../types/trip.ts';
+import { transformToRequest } from '../../utils/trip/transformToRequest.ts';
 
 interface TripTitleAndSubmitStepProps {
   setStep: (step: number) => void;
@@ -38,13 +39,13 @@ export const TripTitleAndSubmitStep = ({ setStep, mode }: TripTitleAndSubmitStep
     isError: isCreateError,
     error: createError,
   } = useMutation<Trip, Error, TripFormValues, { previousTrips: Trip[] | undefined }>({
-    mutationFn: (data: TripFormValues) => createTripApi({ ...data }),
+    mutationFn: (data: TripFormValues) => createTripApi(transformToRequest(data)),
     onMutate: async (newTripData) => {
       await queryClient.cancelQueries({ queryKey: tripQueryKeys.all });
       const previousTrips = queryClient.getQueryData<Trip[]>(tripQueryKeys.all);
       queryClient.setQueryData<Trip[]>(tripQueryKeys.all, (old) => {
         if (!old) return [];
-        return [...old, { ...newTripData, id: Date.now() }];
+        return [...old, { ...transformToRequest(newTripData), id: Date.now() }];
       });
 
       return { previousTrips };
@@ -76,14 +77,14 @@ export const TripTitleAndSubmitStep = ({ setStep, mode }: TripTitleAndSubmitStep
     mutationFn: (data: TripFormValues) =>
       updateTripApi({
         id: tripIdNumber,
-        body: data,
+        body: transformToRequest(data),
       }),
     onMutate: async (newTripData) => {
       await queryClient.cancelQueries({ queryKey: tripQueryKeys.detail(tripIdNumber) });
       const previousDetail = queryClient.getQueryData<Trip>(tripQueryKeys.detail(tripIdNumber));
       queryClient.setQueryData<Trip>(tripQueryKeys.detail(tripIdNumber), (old) => {
         if (!old) return;
-        return { ...old, ...newTripData };
+        return { ...old, ...transformToRequest(newTripData) };
       });
       return { previousDetail };
     },

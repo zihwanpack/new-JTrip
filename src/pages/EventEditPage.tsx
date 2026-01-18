@@ -25,7 +25,7 @@ export const EventEditPage = () => {
     ...useEventDetailQueryOptions({ eventId: eventIdNumber }),
   });
 
-  const defaultValues = {
+  const defaultValues:EventFormValues = {
     eventName: '',
     location: '',
     startDate: '',
@@ -36,7 +36,7 @@ export const EventEditPage = () => {
   const form = useForm<EventFormValues>({
     resolver: zodResolver(eventFormSchema),
     mode: 'onChange',
-    defaultValues: defaultValues as EventFormValues,
+    defaultValues: defaultValues,
   });
 
   useEffect(() => {
