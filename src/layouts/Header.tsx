@@ -13,6 +13,7 @@ export const Header = ({ title, onClose }: HeaderProps) => {
       <Typography variant="h2">{title}</Typography>
       {onClose && (
         <Button
+          aria-label='닫기 버튼'
           type="button"
           onClick={onClose}
           className="absolute right-4 p-1 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 cursor-pointer"
