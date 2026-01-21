@@ -20,7 +20,7 @@ export const Footer = () => {
           className="flex flex-col items-center gap-1 text-slate-500 dark:text-slate-400 transition hover:text-slate-900 dark:hover:text-slate-100 cursor-grab"
           onClick={() => navigate('/')}
         >
-          <img src={pathname === '/' ? onHouse : offHouse} className="text-base" />
+          <img src={pathname === '/' ? onHouse : offHouse} className="text-base" alt='홈' />
           <span>홈</span>
         </Button>
         <Button
@@ -29,7 +29,7 @@ export const Footer = () => {
         >
           <img
             src={pathname === '/my-trips' ? onSuitcaseRolling : offSuitcaseRolling}
-            className="text-base"
+            className="text-base" alt='내 여행'
           />
           <span>내 여행</span>
         </Button>
@@ -37,7 +37,7 @@ export const Footer = () => {
           className="flex flex-col items-center gap-1 text-slate-500 dark:text-slate-400 transition hover:text-slate-900 dark:hover:text-slate-100 cursor-grab"
           onClick={() => navigate('/mypage')}
         >
-          <img src={pathname === '/mypage' ? onUser : offUser} className="text-base" />
+          <img src={pathname === '/mypage' ? onUser : offUser} className="text-base" alt='마이페이지' />
           <span>마이페이지</span>
         </Button>
       </nav>
