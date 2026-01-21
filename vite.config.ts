@@ -9,7 +9,11 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [
-      react(),
+      react({
+        babel: {
+          plugins: [],
+        },
+      }),
       tailwindcss(),
       createHtmlPlugin({
         minify: true,
@@ -20,6 +24,9 @@ export default defineConfig(({ mode }) => {
         },
       }),
     ],
+    build: {
+      sourcemap: true,
+    },
     resolve: {
       alias: {
         '@': path.resolve(__dirname, 'src'),

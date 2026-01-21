@@ -97,6 +97,7 @@ export const TripCard = ({
         <div className="size-20 rounded-xl overflow-hidden bg-gray-200 dark:bg-gray-700 shrink-0">
           <img
             src={tripImage}
+            loading="lazy"
             alt={`${title} 여행 이미지`}
             className="w-full h-full object-cover"
           />

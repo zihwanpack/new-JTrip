@@ -1,21 +1,24 @@
 import { createBrowserRouter, type RouteObject } from 'react-router-dom';
+import { Suspense, lazy } from 'react';
 
 import { HomePage } from '../pages/HomePage.tsx';
 import { LoginPage } from '../pages/LoginPage.tsx';
-import { TripCreatePage } from '../pages/TripCreatePage.tsx';
 import { NotFound } from '../pages/NotFound.tsx';
 import { ProtectedLayout } from '../layouts/ProtectedLayout.tsx';
 import { BaseLayout } from '../layouts/BaseLayout.tsx';
-import { TripDetailPage } from '../pages/TripDetailPage.tsx';
-import { EventCreatePage } from '../pages/EventCreatePage.tsx';
-import { EventDetailPage } from '../pages/EventDetailPage.tsx';
-import { MyTripsPage } from '../pages/MyTripsPage.tsx';
-import { Mypage } from '../pages/Mypage.tsx';
-import { TripEditPage } from '../pages/TripEditPage.tsx';
-import { EventEditPage } from '../pages/EventEditPage.tsx';
-import { ErrorBoundary } from '../errors/ErrorBoundary.tsx';
-import { Suspense } from 'react';
 import { FullscreenLoader } from '../components/common/FullscreenLoader.tsx';
+import { ErrorBoundary } from '../errors/ErrorBoundary.tsx';
+
+const TripCreatePage = lazy(() => import('../pages/TripCreatePage.tsx').then((module) => ({ default: module.TripCreatePage })));
+const TripDetailPage = lazy(() => import('../pages/TripDetailPage.tsx').then((module) => ({ default: module.TripDetailPage })));
+const EventCreatePage = lazy(() => import('../pages/EventCreatePage.tsx').then((module) => ({ default: module.EventCreatePage })));
+const EventDetailPage = lazy(() => import('../pages/EventDetailPage.tsx').then((module) => ({ default: module.EventDetailPage })));
+const MyTripsPage = lazy(() => import('../pages/MyTripsPage.tsx').then((module) => ({ default: module.MyTripsPage })));
+const Mypage = lazy(() => import('../pages/Mypage.tsx').then((module) => ({ default: module.Mypage })));
+const TripEditPage = lazy(() => import('../pages/TripEditPage.tsx').then((module) => ({ default: module.TripEditPage })));
+const EventEditPage = lazy(() => import('../pages/EventEditPage.tsx').then((module) => ({ default: module.EventEditPage })));
+
+
 
 const publicRoutes: RouteObject[] = [
   {
@@ -37,79 +40,55 @@ const protectedRoutes: RouteObject[] = [
     path: '/',
     element: <ProtectedLayout />,
     children: [
-      {
-        element: <BaseLayout />,
+      { 
+        element: 
+        <ErrorBoundary>
+          <Suspense fallback={<FullscreenLoader />}>
+            <BaseLayout />
+          </Suspense>
+        </ErrorBoundary>
+        ,
         children: [
           {
             index: true,
-            element: (
-              <ErrorBoundary>
-                <Suspense fallback={<FullscreenLoader />}>
-                  <HomePage />
-                </Suspense>
-              </ErrorBoundary>
-            ),
+            element: <HomePage />
           },
-          { path: '*', element: <NotFound /> },
           {
             path: 'trips/new',
-            element: <TripCreatePage />,
+            element: <TripCreatePage />
           },
           {
             path: 'trips/:tripId/edit',
-            element: (
-              <ErrorBoundary>
-                <Suspense fallback={<FullscreenLoader />}>
-                  <TripEditPage />
-                </Suspense>
-              </ErrorBoundary>
-            ),
+            element: <TripEditPage />
           },
           {
             path: 'trips/:tripId',
-            element: (
-              <ErrorBoundary>
-                <Suspense fallback={<FullscreenLoader />}>
-                  <TripDetailPage />
-                </Suspense>
-              </ErrorBoundary>
-            ),
+            element: <TripDetailPage />
           },
           {
             path: 'trips/:tripId/events/new',
-            element: <EventCreatePage />,
+            element: <EventCreatePage />
           },
 
           {
             path: 'trips/:tripId/events/:eventId/edit',
-            element: (
-              <ErrorBoundary>
-                <Suspense fallback={<FullscreenLoader />}>
-                  <EventEditPage />
-                </Suspense>
-              </ErrorBoundary>
-            ),
+            element: <EventEditPage />
           },
           {
             path: 'trips/:tripId/events/:eventId',
-            element: (
-              <ErrorBoundary>
-                <Suspense fallback={<FullscreenLoader />}>
-                  <EventDetailPage />
-                </Suspense>
-              </ErrorBoundary>
-            ),
+            element: <EventDetailPage />
           },
           {
             path: 'my-trips',
-            element: <MyTripsPage />,
+            element: <MyTripsPage />
           },
           {
             path: 'mypage',
-            element: <Mypage />,
+            element: <Mypage />
           },
         ],
       },
+      { path: '*', element: <NotFound /> },
     ],
   },
 ];
